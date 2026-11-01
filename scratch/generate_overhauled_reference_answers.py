@@ -1,0 +1,1032 @@
+"""
+scratch/generate_overhauled_reference_answers.py
+
+Script to generate the complete, overhauled data/reference_answers.json with:
+- All 7 Python concepts: Variables, Conditionals, Loops, Functions, Arrays, Syntax, OOP.
+- 3 Difficulty levels per modality: 'easy', 'medium', 'hard'.
+- Exactly 3 Easy MCQs, 3 Medium MCQs, 3 Hard MCQs (9 MCQs per concept, 63 total).
+- Exactly 1 Easy, 1 Medium, 1 Hard Short Answer (3 Short Answers per concept, 21 total).
+- Exactly 1 Easy, 1 Medium, 1 Hard Coding task with comprehensive unit test cases (3 Coding tasks per concept, 21 total).
+"""
+
+import json
+import os
+
+reference_answers = {
+    "Variables": {
+        "mcqs": {
+            "easy": [
+                {
+                    "id": "Variables_MCQ_Easy_1",
+                    "difficulty": "easy",
+                    "question": "Which of the following is a valid Python variable name?",
+                    "options": ["A) 1st_variable", "B) my_variable_1", "C) for", "D) my-variable"],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Variables_MCQ_Easy_2",
+                    "difficulty": "easy",
+                    "question": "What is the output of x = 5; x += 3; print(x)?",
+                    "options": ["A) 53", "B) 8", "C) 5", "D) Error"],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Variables_MCQ_Easy_3",
+                    "difficulty": "easy",
+                    "question": "Which data type is returned by type(3.14) in Python?",
+                    "options": ["A) int", "B) str", "C) float", "D) double"],
+                    "correct_option": "C"
+                }
+            ],
+            "medium": [
+                {
+                    "id": "Variables_MCQ_Medium_1",
+                    "difficulty": "medium",
+                    "question": "What will be the values of a and b after executing: a, b = 10, 20; a, b = b, a + b?",
+                    "options": ["A) a = 20, b = 30", "B) a = 10, b = 20", "C) a = 20, b = 20", "D) a = 30, b = 20"],
+                    "correct_option": "A"
+                },
+                {
+                    "id": "Variables_MCQ_Medium_2",
+                    "difficulty": "medium",
+                    "question": "What is the result of bool([]) and bool('False') in Python?",
+                    "options": ["A) False, False", "B) False, True", "C) True, True", "D) True, False"],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Variables_MCQ_Medium_3",
+                    "difficulty": "medium",
+                    "question": "Given x = [1, 2]; y = x; y.append(3). What is print(x)?",
+                    "options": ["A) [1, 2]", "B) [1, 2, 3]", "C) [3]", "D) AttributeError"],
+                    "correct_option": "B"
+                }
+            ],
+            "hard": [
+                {
+                    "id": "Variables_MCQ_Hard_1",
+                    "difficulty": "hard",
+                    "question": "What will happen if you reference a variable before assignment inside a function that defines it as a local variable?",
+                    "options": [
+                        "A) It accesses the global variable",
+                        "B) It raises an UnboundLocalError",
+                        "C) It returns None",
+                        "D) It initializes the variable to 0"
+                    ],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Variables_MCQ_Hard_2",
+                    "difficulty": "hard",
+                    "question": "In Python, which statement about small integer caching (-5 to 256) and the 'is' operator is true?",
+                    "options": [
+                        "A) x = 256; y = 256; x is y evaluates to True",
+                        "B) x = 256; y = 256; x is y evaluates to False",
+                        "C) 'is' checks for value equality, not identity",
+                        "D) Small integers are reallocated memory upon every assignment"
+                    ],
+                    "correct_option": "A"
+                },
+                {
+                    "id": "Variables_MCQ_Hard_3",
+                    "difficulty": "hard",
+                    "question": "What does the 'nonlocal' keyword do in a nested Python function?",
+                    "options": [
+                        "A) Declares a variable as global across the entire module",
+                        "B) Binds a variable to the nearest enclosing non-global scope",
+                        "C) Prevents the variable from being modified",
+                        "D) Deletes the variable from the local scope"
+                    ],
+                    "correct_option": "B"
+                }
+            ]
+        },
+        "short_answer": {
+            "easy": {
+                "id": "Variables_SA_Easy_1",
+                "difficulty": "easy",
+                "question": "Explain what a variable is in Python and why it is used.",
+                "reference_answer": "A variable is a named container in computer memory used to store data values that can be referenced and modified throughout a program."
+            },
+            "medium": {
+                "id": "Variables_SA_Medium_1",
+                "difficulty": "medium",
+                "question": "Explain dynamic typing in Python and what happens in memory when a variable is reassigned to a different data type.",
+                "reference_answer": "Python is dynamically typed, meaning variable types are determined at runtime rather than compile time. When a variable is reassigned to a different type, Python creates a new object in memory and updates the variable's reference pointer to point to the new object, leaving the old object for garbage collection if unreferenced."
+            },
+            "hard": {
+                "id": "Variables_SA_Hard_1",
+                "difficulty": "hard",
+                "question": "Explain Python's LEGB rule for variable scope resolution and how the 'global' and 'nonlocal' keywords alter this resolution.",
+                "reference_answer": "The LEGB rule determines variable lookup priority: Local, Enclosing, Global, and Built-in scopes. Python searches each scope in this sequence. The 'global' keyword forces variable binding directly to the module-level global scope, while 'nonlocal' binds to the nearest enclosing non-global function scope."
+            }
+        },
+        "coding": {
+            "easy": {
+                "id": "Variables_Code_Easy_1",
+                "difficulty": "easy",
+                "problem": "Write a function sum_two_numbers(a, b) that takes two numbers and returns their sum.",
+                "template": "def sum_two_numbers(a, b):\n    # Write your solution here\n    return a + b\n",
+                "test_cases": [
+                    {"call": "sum_two_numbers(2, 3)", "expected": 5, "description": "Sum of two positive integers"},
+                    {"call": "sum_two_numbers(-1, 1)", "expected": 0, "description": "Sum of negative and positive"},
+                    {"call": "sum_two_numbers(0, 0)", "expected": 0, "description": "Sum of zeros"}
+                ]
+            },
+            "medium": {
+                "id": "Variables_Code_Medium_1",
+                "difficulty": "medium",
+                "problem": "Write a function convert_temperature(temp, unit) where unit is 'C' (Celsius) or 'F' (Fahrenheit). If 'C', convert to Fahrenheit (temp * 9/5 + 32). If 'F', convert to Celsius ((temp - 32) * 5/9). Round to 2 decimal places.",
+                "template": "def convert_temperature(temp, unit):\n    # Write your solution here\n    if unit.upper() == 'C':\n        return round(temp * 9.0 / 5.0 + 32.0, 2)\n    elif unit.upper() == 'F':\n        return round((temp - 32.0) * 5.0 / 9.0, 2)\n    return None\n",
+                "test_cases": [
+                    {"call": "convert_temperature(0, 'C')", "expected": 32.0, "description": "Freezing point C to F"},
+                    {"call": "convert_temperature(100, 'C')", "expected": 212.0, "description": "Boiling point C to F"},
+                    {"call": "convert_temperature(32, 'F')", "expected": 0.0, "description": "Freezing point F to C"}
+                ]
+            },
+            "hard": {
+                "id": "Variables_Code_Hard_1",
+                "difficulty": "hard",
+                "problem": "Write a function swap_and_aggregate(data_dict) that takes a dictionary mapping string keys to numeric values, swaps keys and values into a new dict (values become keys), and if duplicate values exist, aggregates the original keys into a sorted list.",
+                "template": "def swap_and_aggregate(data_dict):\n    # Write your solution here\n    res = {}\n    for k, v in data_dict.items():\n        if v not in res:\n            res[v] = [k]\n        else:\n            res[v].append(k)\n    return {k: sorted(v) if len(v) > 1 else v[0] for k, v in res.items()}\n",
+                "test_cases": [
+                    {"call": "swap_and_aggregate({'a': 1, 'b': 2})", "expected": {1: 'a', 2: 'b'}, "description": "Unique values swap directly"},
+                    {"call": "swap_and_aggregate({'a': 1, 'b': 1, 'c': 2})", "expected": {1: ['a', 'b'], 2: 'c'}, "description": "Duplicates aggregated into sorted list"},
+                    {"call": "swap_and_aggregate({})", "expected": {}, "description": "Empty dictionary handling"}
+                ]
+            }
+        }
+    },
+    "Conditionals": {
+        "mcqs": {
+            "easy": [
+                {
+                    "id": "Conditionals_MCQ_Easy_1",
+                    "difficulty": "easy",
+                    "question": "What will bool(0) evaluate to in Python?",
+                    "options": ["A) True", "B) False", "C) None", "D) Error"],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Conditionals_MCQ_Easy_2",
+                    "difficulty": "easy",
+                    "question": "Which keyword is used for additional conditional checks after 'if' in Python?",
+                    "options": ["A) else if", "B) elseif", "C) elif", "D) otherwise"],
+                    "correct_option": "C"
+                },
+                {
+                    "id": "Conditionals_MCQ_Easy_3",
+                    "difficulty": "easy",
+                    "question": "What is the result of True and not False?",
+                    "options": ["A) True", "B) False", "C) None", "D) Error"],
+                    "correct_option": "A"
+                }
+            ],
+            "medium": [
+                {
+                    "id": "Conditionals_MCQ_Medium_1",
+                    "difficulty": "medium",
+                    "question": "What is the output of the chained comparison: 1 < 3 > 2 == 2 in Python?",
+                    "options": ["A) True", "B) False", "C) TypeError", "D) SyntaxError"],
+                    "correct_option": "A"
+                },
+                {
+                    "id": "Conditionals_MCQ_Medium_2",
+                    "difficulty": "medium",
+                    "question": "What is the return value of: [] or 'default' in Python?",
+                    "options": ["A) []", "B) 'default'", "C) True", "D) False"],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Conditionals_MCQ_Medium_3",
+                    "difficulty": "medium",
+                    "question": "What does 'x if condition else y' represent in Python?",
+                    "options": ["A) A syntax error", "B) A ternary conditional expression", "C) A loop construct", "D) A lambda function"],
+                    "correct_option": "B"
+                }
+            ],
+            "hard": [
+                {
+                    "id": "Conditionals_MCQ_Hard_1",
+                    "difficulty": "hard",
+                    "question": "How does Python evaluate 'f() or g()' when f() returns a non-empty string?",
+                    "options": [
+                        "A) Both f() and g() are evaluated in parallel",
+                        "B) f() is evaluated and g() is never called due to short-circuiting",
+                        "C) g() is evaluated first, then f()",
+                        "D) Both f() and g() must evaluate to booleans or a TypeError is raised"
+                    ],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Conditionals_MCQ_Hard_2",
+                    "difficulty": "hard",
+                    "question": "In Python 3.10+ match-case statements, what does the wildcard case _ represent?",
+                    "options": [
+                        "A) Matches only None values",
+                        "B) A catch-all pattern equivalent to a default else branch",
+                        "C) Matches only single-character strings",
+                        "D) Raises an unhandled pattern exception"
+                    ],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Conditionals_MCQ_Hard_3",
+                    "difficulty": "hard",
+                    "question": "What is the result of: not (True or False and False)?",
+                    "options": ["A) True", "B) False", "C) None", "D) Error"],
+                    "correct_option": "B"
+                }
+            ]
+        },
+        "short_answer": {
+            "easy": {
+                "id": "Conditionals_SA_Easy_1",
+                "difficulty": "easy",
+                "question": "Describe how an if-elif-else conditional statement controls program execution flow.",
+                "reference_answer": "An if-elif-else statement evaluates boolean expressions sequentially and executes the block of code corresponding to the first true condition, skipping remaining checks."
+            },
+            "medium": {
+                "id": "Conditionals_SA_Medium_1",
+                "difficulty": "medium",
+                "question": "Explain short-circuit evaluation in Python logical operators 'and' and 'or', including what value is returned.",
+                "reference_answer": "Short-circuit evaluation stops evaluating logical expressions as soon as the outcome is determined. 'and' returns the first falsy operand or the last truthy operand; 'or' returns the first truthy operand or the last falsy operand without evaluating subsequent expressions."
+            },
+            "hard": {
+                "id": "Conditionals_SA_Hard_1",
+                "difficulty": "hard",
+                "question": "Compare Python's if-elif-else branching with Python 3.10's structural pattern matching (match-case), explaining when pattern matching provides advantages.",
+                "reference_answer": "While if-elif-else evaluates arbitrary boolean expressions sequentially, structural pattern matching (match-case) matches subject data against structural templates (shapes, types, sequence unpacking, and class attributes). Pattern matching excels in destructuring complex nested data structures and AST node handling."
+            }
+        },
+        "coding": {
+            "easy": {
+                "id": "Conditionals_Code_Easy_1",
+                "difficulty": "easy",
+                "problem": "Write a function is_even(num) that returns True if a number is even, and False otherwise.",
+                "template": "def is_even(num):\n    # Write conditional check\n    return num % 2 == 0\n",
+                "test_cases": [
+                    {"call": "is_even(4)", "expected": True, "description": "Even number returns True"},
+                    {"call": "is_even(7)", "expected": False, "description": "Odd number returns False"},
+                    {"call": "is_even(0)", "expected": True, "description": "Zero is even"}
+                ]
+            },
+            "medium": {
+                "id": "Conditionals_Code_Medium_1",
+                "difficulty": "medium",
+                "problem": "Write a function classify_triangle(a, b, c) that returns 'Equilateral', 'Isosceles', 'Scalene', or 'Invalid' if side lengths cannot form a triangle.",
+                "template": "def classify_triangle(a, b, c):\n    # Check valid triangle inequality: a+b>c, a+c>b, b+c>a\n    if a <= 0 or b <= 0 or c <= 0 or a + b <= c or a + c <= b or b + c <= a:\n        return 'Invalid'\n    if a == b == c:\n        return 'Equilateral'\n    elif a == b or b == c or a == c:\n        return 'Isosceles'\n    else:\n        return 'Scalene'\n",
+                "test_cases": [
+                    {"call": "classify_triangle(3, 3, 3)", "expected": "Equilateral", "description": "All three sides equal"},
+                    {"call": "classify_triangle(5, 5, 8)", "expected": "Isosceles", "description": "Two sides equal"},
+                    {"call": "classify_triangle(1, 2, 10)", "expected": "Invalid", "description": "Violates triangle inequality"}
+                ]
+            },
+            "hard": {
+                "id": "Conditionals_Code_Hard_1",
+                "difficulty": "hard",
+                "problem": "Write a function validate_password(password) that returns True if password is at least 8 chars long, contains at least one uppercase letter, one lowercase letter, one digit, and one special character from '!@#$%^&*'. Otherwise returns False.",
+                "template": "def validate_password(password):\n    # Write password validation logic\n    if len(password) < 8:\n        return False\n    has_upper = any(c.isupper() for c in password)\n    has_lower = any(c.islower() for c in password)\n    has_digit = any(c.isdigit() for c in password)\n    has_special = any(c in '!@#$%^&*' for c in password)\n    return has_upper and has_lower and has_digit and has_special\n",
+                "test_cases": [
+                    {"call": "validate_password('Valid123!')", "expected": True, "description": "Meets all criteria"},
+                    {"call": "validate_password('weakpass')", "expected": False, "description": "Missing digits, uppercase, and special chars"},
+                    {"call": "validate_password('Short1!')", "expected": False, "description": "Fails length requirement (<8)"}
+                ]
+            }
+        }
+    },
+    "Loops": {
+        "mcqs": {
+            "easy": [
+                {
+                    "id": "Loops_MCQ_Easy_1",
+                    "difficulty": "easy",
+                    "question": "How many times will 'for i in range(3):' execute?",
+                    "options": ["A) 2 times", "B) 3 times", "C) 4 times", "D) Infinite"],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Loops_MCQ_Easy_2",
+                    "difficulty": "easy",
+                    "question": "Which statement immediately exits the nearest enclosing loop in Python?",
+                    "options": ["A) continue", "B) pass", "C) break", "D) stop"],
+                    "correct_option": "C"
+                },
+                {
+                    "id": "Loops_MCQ_Easy_3",
+                    "difficulty": "easy",
+                    "question": "What sequence does range(1, 5) produce when iterated over?",
+                    "options": ["A) 1, 2, 3, 4, 5", "B) 1, 2, 3, 4", "C) 0, 1, 2, 3, 4", "D) 2, 3, 4, 5"],
+                    "correct_option": "B"
+                }
+            ],
+            "medium": [
+                {
+                    "id": "Loops_MCQ_Medium_1",
+                    "difficulty": "medium",
+                    "question": "When does the 'else' block attached to a Python 'for' loop execute?",
+                    "options": [
+                        "A) Only if the loop was terminated by a break statement",
+                        "B) When the loop completes normally without encountering a break",
+                        "C) Whenever an exception occurs inside the loop",
+                        "D) Exactly once before the loop begins"
+                    ],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Loops_MCQ_Medium_2",
+                    "difficulty": "medium",
+                    "question": "What is the output of: list(range(10, 0, -3))?",
+                    "options": ["A) [10, 7, 4, 1]", "B) [10, 7, 4, 1, -2]", "C) [10, 8, 6, 4, 2]", "D) []"],
+                    "correct_option": "A"
+                },
+                {
+                    "id": "Loops_MCQ_Medium_3",
+                    "difficulty": "medium",
+                    "question": "What does the 'continue' keyword do when encountered inside a loop?",
+                    "options": [
+                        "A) Terminates the loop completely",
+                        "B) Skips the rest of the current iteration and jumps to the next iteration",
+                        "C) Restarts the loop from the initial counter",
+                        "D) Pauses loop execution indefinitely"
+                    ],
+                    "correct_option": "B"
+                }
+            ],
+            "hard": [
+                {
+                    "id": "Loops_MCQ_Hard_1",
+                    "difficulty": "hard",
+                    "question": "What happens if you mutate a list (e.g. lst.pop(0)) while directly iterating over it with 'for item in lst:'?",
+                    "options": [
+                        "A) Python raises a ConcurrentModificationException",
+                        "B) Elements are skipped because the internal iterator index advances normally",
+                        "C) The loop automatically creates a frozen snapshot copy",
+                        "D) The loop executes in reverse order"
+                    ],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Loops_MCQ_Hard_2",
+                    "difficulty": "hard",
+                    "question": "Which construct allows iterating over two iterables simultaneously while stopping when the shortest is exhausted?",
+                    "options": ["A) enumerate()", "B) zip()", "C) itertools.cycle()", "D) chain()"],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Loops_MCQ_Hard_3",
+                    "difficulty": "hard",
+                    "question": "What is the return value of next(iter([]), 'empty')?",
+                    "options": ["A) Raises StopIteration", "B) None", "C) 'empty'", "D) []"],
+                    "correct_option": "C"
+                }
+            ]
+        },
+        "short_answer": {
+            "easy": {
+                "id": "Loops_SA_Easy_1",
+                "difficulty": "easy",
+                "question": "What is the main difference between a for loop and a while loop?",
+                "reference_answer": "A for loop iterates over a pre-determined sequence or range, whereas a while loop continues executing repeatedly as long as a boolean condition remains true."
+            },
+            "medium": {
+                "id": "Loops_SA_Medium_1",
+                "difficulty": "medium",
+                "question": "Explain the behavior and practical use cases of an 'else' block attached to a for or while loop in Python.",
+                "reference_answer": "In Python, the loop 'else' block executes only when the loop terminates naturally after finishing all iterations or failing its condition, but NOT if the loop is exited prematurely via a break statement. It is commonly used in search algorithms to handle cases where no matching item was found."
+            },
+            "hard": {
+                "id": "Loops_SA_Hard_1",
+                "difficulty": "hard",
+                "question": "Explain the iterator protocol in Python (__iter__ and __next__) and how 'for' loops utilize this protocol under the hood.",
+                "reference_answer": "Python's iterator protocol requires an iterable to implement __iter__(), returning an iterator, and the iterator to implement __next__(), returning successive items or raising StopIteration when exhausted. Under the hood, a 'for' loop calls iter() on the collection and repeatedly calls next() inside a try-except block that cleanly catches StopIteration to terminate."
+            }
+        },
+        "coding": {
+            "easy": {
+                "id": "Loops_Code_Easy_1",
+                "difficulty": "easy",
+                "problem": "Write a function sum_n(n) that calculates the sum of integers from 1 to n using a loop.",
+                "template": "def sum_n(n):\n    total = 0\n    for i in range(1, n + 1):\n        total += i\n    return total\n",
+                "test_cases": [
+                    {"call": "sum_n(5)", "expected": 15, "description": "Sum 1 through 5 is 15"},
+                    {"call": "sum_n(1)", "expected": 1, "description": "Sum 1 is 1"},
+                    {"call": "sum_n(0)", "expected": 0, "description": "Sum 0 is 0"}
+                ]
+            },
+            "medium": {
+                "id": "Loops_Code_Medium_1",
+                "difficulty": "medium",
+                "problem": "Write a function count_vowels(text) that uses a loop to count the number of vowels (a, e, i, o, u, case-insensitive) in a given string.",
+                "template": "def count_vowels(text):\n    count = 0\n    vowels = set('aeiouAEIOU')\n    for char in text:\n        if char in vowels:\n            count += 1\n    return count\n",
+                "test_cases": [
+                    {"call": "count_vowels('Hello World')", "expected": 3, "description": "3 vowels in Hello World"},
+                    {"call": "count_vowels('PYTHON')", "expected": 1, "description": "1 vowel in PYTHON"},
+                    {"call": "count_vowels('rhythm')", "expected": 0, "description": "0 vowels in rhythm"}
+                ]
+            },
+            "hard": {
+                "id": "Loops_Code_Hard_1",
+                "difficulty": "hard",
+                "problem": "Write a function find_primes(n) that uses nested loops to return a list of all prime numbers less than or equal to n.",
+                "template": "def find_primes(n):\n    primes = []\n    for num in range(2, n + 1):\n        is_prime = True\n        for d in range(2, int(num**0.5) + 1):\n            if num % d == 0:\n                is_prime = False\n                break\n        if is_prime:\n            primes.append(num)\n    return primes\n",
+                "test_cases": [
+                    {"call": "find_primes(10)", "expected": [2, 3, 5, 7], "description": "Primes up to 10"},
+                    {"call": "find_primes(20)", "expected": [2, 3, 5, 7, 11, 13, 17, 19], "description": "Primes up to 20"},
+                    {"call": "find_primes(1)", "expected": [], "description": "No primes <= 1"}
+                ]
+            }
+        }
+    },
+    "Functions": {
+        "mcqs": {
+            "easy": [
+                {
+                    "id": "Functions_MCQ_Easy_1",
+                    "difficulty": "easy",
+                    "question": "Which keyword is used to define a function in Python?",
+                    "options": ["A) function", "B) def", "C) fn", "D) define"],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Functions_MCQ_Easy_2",
+                    "difficulty": "easy",
+                    "question": "What value does a function return by default if no return statement is specified?",
+                    "options": ["A) 0", "B) False", "C) None", "D) Undefined"],
+                    "correct_option": "C"
+                },
+                {
+                    "id": "Functions_MCQ_Easy_3",
+                    "difficulty": "easy",
+                    "question": "What are default parameter values in Python functions?",
+                    "options": [
+                        "A) Values assigned when no argument is provided",
+                        "B) Global variables",
+                        "C) Constant values that cannot change",
+                        "D) Mandatory arguments"
+                    ],
+                    "correct_option": "A"
+                }
+            ],
+            "medium": [
+                {
+                    "id": "Functions_MCQ_Medium_1",
+                    "difficulty": "medium",
+                    "question": "What does *args collect positional arguments into inside a Python function?",
+                    "options": ["A) A list", "B) A tuple", "C) A set", "D) A dictionary"],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Functions_MCQ_Medium_2",
+                    "difficulty": "medium",
+                    "question": "What does **kwargs collect keyword arguments into inside a Python function?",
+                    "options": ["A) A list", "B) A tuple", "C) A dictionary", "D) A string"],
+                    "correct_option": "C"
+                },
+                {
+                    "id": "Functions_MCQ_Medium_3",
+                    "difficulty": "medium",
+                    "question": "What is the output of: (lambda x, y: x * y + 2)(3, 4)?",
+                    "options": ["A) 14", "B) 18", "C) 24", "D) Error"],
+                    "correct_option": "A"
+                }
+            ],
+            "hard": [
+                {
+                    "id": "Functions_MCQ_Hard_1",
+                    "difficulty": "hard",
+                    "question": "Why is using a mutable default argument like 'def f(lst=[]):' considered dangerous in Python?",
+                    "options": [
+                        "A) It causes an immediate SyntaxError",
+                        "B) The default list object is created once at function definition time and shared across subsequent calls",
+                        "C) Python creates a new copy of the list on every call, consuming excessive memory",
+                        "D) Elements inside the list cannot be modified"
+                    ],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Functions_MCQ_Hard_2",
+                    "difficulty": "hard",
+                    "question": "In Python decorators, what is the role of functools.wraps?",
+                    "options": [
+                        "A) Executes the function in an isolated process",
+                        "B) Preserves original function metadata (__name__, __doc__, annotations)",
+                        "C) Automatically caches return values",
+                        "D) Converts synchronous functions into coroutines"
+                    ],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Functions_MCQ_Hard_3",
+                    "difficulty": "hard",
+                    "question": "What is the closure variable accessed via func.__closure__[0].cell_contents in Python?",
+                    "options": [
+                        "A) Global variables referenced by func",
+                        "B) Free variables bound from an enclosing lexical scope",
+                        "C) Default argument parameters",
+                        "D) Built-in functions available to func"
+                    ],
+                    "correct_option": "B"
+                }
+            ]
+        },
+        "short_answer": {
+            "easy": {
+                "id": "Functions_SA_Easy_1",
+                "difficulty": "easy",
+                "question": "Explain the purpose of functions in software development and the concept of parameters versus arguments.",
+                "reference_answer": "Functions break programs into modular reusable blocks of code. Parameters are variable placeholders in the function definition, while arguments are the actual values passed into the function when called."
+            },
+            "medium": {
+                "id": "Functions_SA_Medium_1",
+                "difficulty": "medium",
+                "question": "Explain how *args and **kwargs enable variable-length argument passing in Python.",
+                "reference_answer": "*args allows a function to accept any number of positional arguments, packing them into an immutable tuple. **kwargs allows accepting arbitrary keyword arguments, packing them into a dictionary of key-value pairs."
+            },
+            "hard": {
+                "id": "Functions_SA_Hard_1",
+                "difficulty": "hard",
+                "question": "Explain what a closure is in Python, how variable binding occurs, and why the mutable default argument pattern causes bugs.",
+                "reference_answer": "A closure is a function object that retains access to variables in its enclosing lexical scope even after that scope has finished execution. Default parameter values are evaluated once when the function is defined; using mutable objects (like lists or dicts) retains mutations across subsequent calls, leading to shared state bugs. The standard fix is using None as default."
+            }
+        },
+        "coding": {
+            "easy": {
+                "id": "Functions_Code_Easy_1",
+                "difficulty": "easy",
+                "problem": "Write a function greet(name) that returns 'Hello, ' followed by the name.",
+                "template": "def greet(name):\n    return 'Hello, ' + str(name)\n",
+                "test_cases": [
+                    {"call": "greet('Alice')", "expected": "Hello, Alice", "description": "Greeting Alice"},
+                    {"call": "greet('Bob')", "expected": "Hello, Bob", "description": "Greeting Bob"},
+                    {"call": "greet(123)", "expected": "Hello, 123", "description": "Greeting integer converted to string"}
+                ]
+            },
+            "medium": {
+                "id": "Functions_Code_Medium_1",
+                "difficulty": "medium",
+                "problem": "Write a function factorial(n) that calculates and returns the factorial of a non-negative integer n.",
+                "template": "def factorial(n):\n    if n < 0:\n        raise ValueError('Negative numbers have no factorial')\n    result = 1\n    for i in range(2, n + 1):\n        result *= i\n    return result\n",
+                "test_cases": [
+                    {"call": "factorial(5)", "expected": 120, "description": "5! = 120"},
+                    {"call": "factorial(0)", "expected": 1, "description": "0! = 1"},
+                    {"call": "factorial(1)", "expected": 1, "description": "1! = 1"}
+                ]
+            },
+            "hard": {
+                "id": "Functions_Code_Hard_1",
+                "difficulty": "hard",
+                "problem": "Write a higher-order function compose(f, g) that returns a new function representing the composition f(g(x)).",
+                "template": "def compose(f, g):\n    def composed_fn(*args, **kwargs):\n        return f(g(*args, **kwargs))\n    return composed_fn\n",
+                "test_cases": [
+                    {"call": "compose(lambda x: x + 1, lambda x: x * 2)(3)", "expected": 7, "description": "f(g(3)) = (3*2)+1 = 7"},
+                    {"call": "compose(str, lambda x: x ** 2)(5)", "expected": "25", "description": "str(5^2) = '25'"},
+                    {"call": "compose(abs, lambda x: x - 10)(3)", "expected": 7, "description": "abs(3 - 10) = 7"}
+                ]
+            }
+        }
+    },
+    "Arrays": {
+        "mcqs": {
+            "easy": [
+                {
+                    "id": "Arrays_MCQ_Easy_1",
+                    "difficulty": "easy",
+                    "question": "How do you access the last element of a Python list 'lst'?",
+                    "options": ["A) lst[0]", "B) lst[-1]", "C) lst[len(lst)]", "D) lst.last()"],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Arrays_MCQ_Easy_2",
+                    "difficulty": "easy",
+                    "question": "Which list method adds an item to the end of the list in Python?",
+                    "options": ["A) append()", "B) add()", "C) push()", "D) insert()"],
+                    "correct_option": "A"
+                },
+                {
+                    "id": "Arrays_MCQ_Easy_3",
+                    "difficulty": "easy",
+                    "question": "What is the result of [1, 2] + [3, 4] in Python?",
+                    "options": ["A) [4, 6]", "B) [1, 2, 3, 4]", "C) [[1, 2], [3, 4]]", "D) Error"],
+                    "correct_option": "B"
+                }
+            ],
+            "medium": [
+                {
+                    "id": "Arrays_MCQ_Medium_1",
+                    "difficulty": "medium",
+                    "question": "What is the result of lst = [0, 1, 2, 3, 4, 5]; print(lst[1:5:2])?",
+                    "options": ["A) [1, 3]", "B) [1, 3, 5]", "C) [0, 2, 4]", "D) [1, 2, 3, 4]"],
+                    "correct_option": "A"
+                },
+                {
+                    "id": "Arrays_MCQ_Medium_2",
+                    "difficulty": "medium",
+                    "question": "What is the output of [x**2 for x in range(5) if x % 2 != 0]?",
+                    "options": ["A) [1, 9]", "B) [0, 4, 16]", "C) [1, 4, 9]", "D) [1, 9, 25]"],
+                    "correct_option": "A"
+                },
+                {
+                    "id": "Arrays_MCQ_Medium_3",
+                    "difficulty": "medium",
+                    "question": "What does lst.pop() do when called without arguments?",
+                    "options": [
+                        "A) Removes and returns the first element",
+                        "B) Removes and returns the last element",
+                        "C) Clears all elements from the list",
+                        "D) Returns the last element without removing it"
+                    ],
+                    "correct_option": "B"
+                }
+            ],
+            "hard": [
+                {
+                    "id": "Arrays_MCQ_Hard_1",
+                    "difficulty": "hard",
+                    "question": "What is the result of creating a 2D list with row = [0]*2; matrix = [row]*2; matrix[0][0] = 99?",
+                    "options": [
+                        "A) [[99, 0], [0, 0]]",
+                        "B) [[99, 0], [99, 0]]",
+                        "C) [[99, 99], [0, 0]]",
+                        "D) [[99, 99], [99, 99]]"
+                    ],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Arrays_MCQ_Hard_2",
+                    "difficulty": "hard",
+                    "question": "What is the average time complexity of inserting an element at the beginning of a Python list (lst.insert(0, val)) versus appending (lst.append(val))?",
+                    "options": [
+                        "A) O(1) for insert(0), O(N) for append",
+                        "B) O(N) for insert(0), O(1) amortized for append",
+                        "C) O(log N) for both",
+                        "D) O(N) for both"
+                    ],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Arrays_MCQ_Hard_3",
+                    "difficulty": "hard",
+                    "question": "What is the difference between copy.copy() and copy.deepcopy() on a nested list?",
+                    "options": [
+                        "A) copy() creates a shallow copy where inner lists are still shared; deepcopy() recursively copies all nested objects",
+                        "B) copy() copies values, deepcopy() copies types",
+                        "C) deepcopy() is faster than copy()",
+                        "D) copy() works only on integers"
+                    ],
+                    "correct_option": "A"
+                }
+            ]
+        },
+        "short_answer": {
+            "easy": {
+                "id": "Arrays_SA_Easy_1",
+                "difficulty": "easy",
+                "question": "Describe what a list or array is in Python and how indexing works.",
+                "reference_answer": "A Python list is an ordered mutable sequence of elements accessed by 0-based integer indexing, where index 0 represents the first element and negative indices count backwards from the end."
+            },
+            "medium": {
+                "id": "Arrays_SA_Medium_1",
+                "difficulty": "medium",
+                "question": "Explain Python list slicing syntax [start:stop:step] and how negative step values reverse or step through sequences.",
+                "reference_answer": "Python list slicing [start:stop:step] extracts elements starting at index 'start' up to but not including 'stop', incrementing by 'step'. A negative step iterates backwards, such that lst[::-1] reverses the list."
+            },
+            "hard": {
+                "id": "Arrays_SA_Hard_1",
+                "difficulty": "hard",
+                "question": "Explain why lists in Python are implemented as dynamic arrays of pointers, and how this impacts memory usage and algorithmic time complexity for append vs insert operations.",
+                "reference_answer": "Python lists are variable-length arrays storing contiguous 64-bit pointers to PyObject items in heap memory. Because pointers are contiguous, indexing is O(1). Appending is amortized O(1) due to over-allocation growth patterns, whereas inserting at index 0 is O(N) because all subsequent element pointers must be shifted right in memory."
+            }
+        },
+        "coding": {
+            "easy": {
+                "id": "Arrays_Code_Easy_1",
+                "difficulty": "easy",
+                "problem": "Write a function find_max(lst) that returns the maximum numerical value in a list.",
+                "template": "def find_max(lst):\n    if not lst:\n        return None\n    return max(lst)\n",
+                "test_cases": [
+                    {"call": "find_max([1, 5, 3, 9, 2])", "expected": 9, "description": "Max value in list"},
+                    {"call": "find_max([-10, -5, -20])", "expected": -5, "description": "Max among negative numbers"},
+                    {"call": "find_max([42])", "expected": 42, "description": "Single element list"}
+                ]
+            },
+            "medium": {
+                "id": "Arrays_Code_Medium_1",
+                "difficulty": "medium",
+                "problem": "Write a function remove_duplicates(lst) that removes duplicate values from a list while preserving their original order of appearance.",
+                "template": "def remove_duplicates(lst):\n    seen = set()\n    result = []\n    for item in lst:\n        if item not in seen:\n            seen.add(item)\n            result.append(item)\n    return result\n",
+                "test_cases": [
+                    {"call": "remove_duplicates([1, 2, 2, 3, 4, 3, 5])", "expected": [1, 2, 3, 4, 5], "description": "Duplicates removed in order"},
+                    {"call": "remove_duplicates(['a', 'b', 'a', 'c'])", "expected": ['a', 'b', 'c'], "description": "String duplicates removed in order"},
+                    {"call": "remove_duplicates([])", "expected": [], "description": "Empty list returns empty list"}
+                ]
+            },
+            "hard": {
+                "id": "Arrays_Code_Hard_1",
+                "difficulty": "hard",
+                "problem": "Write a function rotate_list(lst, k) that rotates a list to the right by k positions in-place or returning a new list. For example, [1, 2, 3, 4, 5] rotated by k=2 becomes [4, 5, 1, 2, 3].",
+                "template": "def rotate_list(lst, k):\n    if not lst:\n        return []\n    k = k % len(lst)\n    return lst[-k:] + lst[:-k] if k != 0 else lst[:]\n",
+                "test_cases": [
+                    {"call": "rotate_list([1, 2, 3, 4, 5], 2)", "expected": [4, 5, 1, 2, 3], "description": "Rotate right by 2"},
+                    {"call": "rotate_list([1, 2, 3], 4)", "expected": [3, 1, 2], "description": "Rotate right by k > length (4 % 3 = 1)"},
+                    {"call": "rotate_list([1, 2, 3], 0)", "expected": [1, 2, 3], "description": "Rotate right by 0"}
+                ]
+            }
+        }
+    },
+    "Syntax": {
+        "mcqs": {
+            "easy": [
+                {
+                    "id": "Syntax_MCQ_Easy_1",
+                    "difficulty": "easy",
+                    "question": "How are code blocks demarcated in Python?",
+                    "options": ["A) Curly braces {}", "B) Indentation", "C) Parentheses ()", "D) End keywords"],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Syntax_MCQ_Easy_2",
+                    "difficulty": "easy",
+                    "question": "Which character begins a single-line comment in Python?",
+                    "options": ["A) //", "B) /*", "C) #", "D) --"],
+                    "correct_option": "C"
+                },
+                {
+                    "id": "Syntax_MCQ_Easy_3",
+                    "difficulty": "easy",
+                    "question": "What error is raised when code indentation is inconsistent?",
+                    "options": ["A) SyntaxError", "B) IndentationError", "C) TypeError", "D) ValueError"],
+                    "correct_option": "B"
+                }
+            ],
+            "medium": [
+                {
+                    "id": "Syntax_MCQ_Medium_2",
+                    "difficulty": "medium",
+                    "question": "What is the prefix used for raw string literals where escape characters like \\n are treated as literal characters?",
+                    "options": ["A) f", "B) r", "C) b", "D) u"],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Syntax_MCQ_Medium_1",
+                    "difficulty": "medium",
+                    "question": "Which statement allows breaking a long line of code across multiple lines without a backslash?",
+                    "options": [
+                        "A) Wrapping the expression in parentheses ()",
+                        "B) Semicolons ;",
+                        "C) Double quotes \"\"",
+                        "D) Using the continue statement"
+                    ],
+                    "correct_option": "A"
+                },
+                {
+                    "id": "Syntax_MCQ_Medium_3",
+                    "difficulty": "medium",
+                    "question": "What is the syntax for formatted string literals (f-strings) introduced in Python 3.6?",
+                    "options": ["A) f\"{expression}\"", "B) format(expression)", "C) %s % expression", "D) ${expression}"],
+                    "correct_option": "A"
+                }
+            ],
+            "hard": [
+                {
+                    "id": "Syntax_MCQ_Hard_1",
+                    "difficulty": "hard",
+                    "question": "What does the walrus operator ':=' do in Python syntax?",
+                    "options": [
+                        "A) Checks for type equivalence",
+                        "B) Performs assignment expression within larger expressions",
+                        "C) Declares an immutable constant",
+                        "D) Performs integer division and assignment"
+                    ],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Syntax_MCQ_Hard_2",
+                    "difficulty": "hard",
+                    "question": "In Python function signatures, what does a bare asterisk '*' parameter denote (e.g. def f(a, *, b):)?",
+                    "options": [
+                        "A) Accepts arbitrary positional arguments",
+                        "B) Indicates that all subsequent arguments must be passed as keyword-only arguments",
+                        "C) Multiplies default values",
+                        "D) Marks parameters as optional"
+                    ],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "Syntax_MCQ_Hard_3",
+                    "difficulty": "hard",
+                    "question": "What is the purpose of the '__all__' variable in a Python module's syntax?",
+                    "options": [
+                        "A) Lists all installed dependencies",
+                        "B) Defines the public symbols exported when 'from module import *' is used",
+                        "C) Prevents the module from being imported",
+                        "D) Automatically executes tests on import"
+                    ],
+                    "correct_option": "B"
+                }
+            ]
+        },
+        "short_answer": {
+            "easy": {
+                "id": "Syntax_SA_Easy_1",
+                "difficulty": "easy",
+                "question": "Why is indentation essential in Python syntax compared to languages like C or Java?",
+                "reference_answer": "Python uses whitespace indentation to define code blocks and scope control, replacing curly braces or explicit block keywords used in languages like C or Java."
+            },
+            "medium": {
+                "id": "Syntax_SA_Medium_1",
+                "difficulty": "medium",
+                "question": "Explain the difference between SyntaxError and runtime exceptions (like TypeError or ValueError) in Python.",
+                "reference_answer": "SyntaxError occurs during Python's parsing/compilation stage before any code executes, triggered by invalid grammar or improper indentation. In contrast, runtime exceptions like TypeError or ValueError occur while the code is actively executing when an operation is invalid for given values or types."
+            },
+            "hard": {
+                "id": "Syntax_SA_Hard_1",
+                "difficulty": "hard",
+                "question": "Explain the syntax and practical benefits of the walrus operator (:=) and positional-only parameter markers (/ and *) in Python signatures.",
+                "reference_answer": "The walrus operator (:=) assigns values to variables within expressions, enabling concise while loops and list comprehensions without duplicate function calls. In function signatures, '/' specifies that preceding parameters must be positional-only, while '*' requires subsequent parameters to be keyword-only, providing precise API contract control."
+            }
+        },
+        "coding": {
+            "easy": {
+                "id": "Syntax_Code_Easy_1",
+                "difficulty": "easy",
+                "problem": "Write a function fix_syntax() that cleans whitespace and returns True.",
+                "template": "def fix_syntax():\n    return True\n",
+                "test_cases": [
+                    {"call": "fix_syntax()", "expected": True, "description": "Syntax check returns True"}
+                ]
+            },
+            "medium": {
+                "id": "Syntax_Code_Medium_1",
+                "difficulty": "medium",
+                "problem": "Write a function parse_key_values(kv_str) that parses a string like 'name=Alice;age=30;city=London' into a Python dictionary.",
+                "template": "def parse_key_values(kv_str):\n    if not kv_str.strip():\n        return {}\n    result = {}\n    for pair in kv_str.split(';'):\n        if '=' in pair:\n            k, v = pair.split('=', 1)\n            result[k.strip()] = v.strip()\n    return result\n",
+                "test_cases": [
+                    {"call": "parse_key_values('name=Alice;age=30')", "expected": {"name": "Alice", "age": "30"}, "description": "Key value parsing"},
+                    {"call": "parse_key_values('x=10')", "expected": {"x": "10"}, "description": "Single key value pair"},
+                    {"call": "parse_key_values('')", "expected": {}, "description": "Empty string returns empty dict"}
+                ]
+            },
+            "hard": {
+                "id": "Syntax_Code_Hard_1",
+                "difficulty": "hard",
+                "problem": "Write a function safe_eval_math(expr) that safely parses and computes simple binary arithmetic expressions 'A + B', 'A - B', 'A * B', or 'A / B' where A and B are floats. Returns float or 'DivisionByZero' or 'InvalidSyntax'.",
+                "template": "def safe_eval_math(expr):\n    parts = expr.strip().split()\n    if len(parts) != 3:\n        return 'InvalidSyntax'\n    a_str, op, b_str = parts\n    try:\n        a, b = float(a_str), float(b_str)\n    except ValueError:\n        return 'InvalidSyntax'\n    if op == '+':\n        return a + b\n    elif op == '-':\n        return a - b\n    elif op == '*':\n        return a * b\n    elif op == '/':\n        if b == 0:\n            return 'DivisionByZero'\n        return a / b\n    return 'InvalidSyntax'\n",
+                "test_cases": [
+                    {"call": "safe_eval_math('10 + 5')", "expected": 15.0, "description": "Addition"},
+                    {"call": "safe_eval_math('8 / 0')", "expected": "DivisionByZero", "description": "Zero division handling"},
+                    {"call": "safe_eval_math('bad expr')", "expected": "InvalidSyntax", "description": "Syntax error handling"}
+                ]
+            }
+        }
+    },
+    "OOP": {
+        "mcqs": {
+            "easy": [
+                {
+                    "id": "OOP_MCQ_Easy_1",
+                    "difficulty": "easy",
+                    "question": "Which keyword is used to create a class in Python?",
+                    "options": ["A) object", "B) struct", "C) class", "D) type"],
+                    "correct_option": "C"
+                },
+                {
+                    "id": "OOP_MCQ_Easy_2",
+                    "difficulty": "easy",
+                    "question": "What parameter must be explicitly passed as the first argument to instance methods in Python classes?",
+                    "options": ["A) this", "B) self", "C) super", "D) cls"],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "OOP_MCQ_Easy_3",
+                    "difficulty": "easy",
+                    "question": "What is the special constructor method name in Python classes?",
+                    "options": ["A) __init__", "B) __construct__", "C) __new__", "D) class_init"],
+                    "correct_option": "A"
+                }
+            ],
+            "medium": [
+                {
+                    "id": "OOP_MCQ_Medium_1",
+                    "difficulty": "medium",
+                    "question": "What is the difference between a class attribute and an instance attribute in Python?",
+                    "options": [
+                        "A) Class attributes are shared across all instances; instance attributes are unique to each instance",
+                        "B) Class attributes can only be integers",
+                        "C) Instance attributes must be declared outside any method",
+                        "D) Class attributes are private by default"
+                    ],
+                    "correct_option": "A"
+                },
+                {
+                    "id": "OOP_MCQ_Medium_2",
+                    "difficulty": "medium",
+                    "question": "Which built-in function checks whether an object is an instance of a specified class or its subclasses?",
+                    "options": ["A) typeof()", "B) isinstance()", "C) issubclass()", "D) hasinstance()"],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "OOP_MCQ_Medium_3",
+                    "difficulty": "medium",
+                    "question": "What decorator turns an instance method into a getter property that can be accessed without parentheses?",
+                    "options": ["A) @getter", "B) @property", "C) @accessor", "D) @attribute"],
+                    "correct_option": "B"
+                }
+            ],
+            "hard": [
+                {
+                    "id": "OOP_MCQ_Hard_1",
+                    "difficulty": "hard",
+                    "question": "How does Python handle private attributes with double leading underscores (e.g., __secret) inside a class?",
+                    "options": [
+                        "A) Raises a runtime error if accessed outside",
+                        "B) Performs name mangling by rewriting the attribute name to _ClassName__secret",
+                        "C) Encrypts the variable in bytecode",
+                        "D) Restricts access via OS-level memory locks"
+                    ],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "OOP_MCQ_Hard_2",
+                    "difficulty": "hard",
+                    "question": "What algorithm does Python use to determine Method Resolution Order (MRO) in multiple inheritance?",
+                    "options": [
+                        "A) Depth-First Search (DFS)",
+                        "B) C3 Linearization Algorithm",
+                        "C) Breadth-First Search (BFS)",
+                        "D) Dijkstra's Algorithm"
+                    ],
+                    "correct_option": "B"
+                },
+                {
+                    "id": "OOP_MCQ_Hard_3",
+                    "difficulty": "hard",
+                    "question": "What is the primary difference between @classmethod and @staticmethod in Python?",
+                    "options": [
+                        "A) @classmethod receives the class 'cls' as its first parameter; @staticmethod receives neither 'self' nor 'cls'",
+                        "B) @staticmethod can only access global variables",
+                        "C) @classmethod cannot be called on an instance",
+                        "D) @staticmethod cannot return any value"
+                    ],
+                    "correct_option": "A"
+                }
+            ]
+        },
+        "short_answer": {
+            "easy": {
+                "id": "OOP_SA_Easy_1",
+                "difficulty": "easy",
+                "question": "Explain object-oriented programming concepts in Python, specifically classes and objects.",
+                "reference_answer": "Object-oriented programming structures code into classes, which serve as blueprints, and objects, which are concrete instances containing attributes (data) and methods (behavior)."
+            },
+            "medium": {
+                "id": "OOP_SA_Medium_1",
+                "difficulty": "medium",
+                "question": "Explain inheritance in Python and how the super() function allows subclasses to extend parent class behavior.",
+                "reference_answer": "Inheritance allows a subclass to inherit attributes and methods from a parent class, facilitating code reuse and polymorphism. The super() function provides a reference to the parent class, enabling the subclass to invoke parent constructors or methods without explicitly naming the parent class."
+            },
+            "hard": {
+                "id": "OOP_SA_Hard_1",
+                "difficulty": "hard",
+                "question": "Explain Python's Method Resolution Order (MRO) using C3 Linearization in multiple inheritance, and describe how __new__ differs from __init__.",
+                "reference_answer": "Python uses the C3 Linearization algorithm to compute a deterministic Method Resolution Order (MRO) that preserves local precedence ordering and monotonicity in multiple inheritance hierarchies. __new__ is the static allocator method called first to create and return the instance object, whereas __init__ is the initializer method called subsequently to configure the newly created instance."
+            }
+        },
+        "coding": {
+            "easy": {
+                "id": "OOP_Code_Easy_1",
+                "difficulty": "easy",
+                "problem": "Write a class Person with an __init__(self, name) method and a get_name(self) method.",
+                "template": "class Person:\n    def __init__(self, name):\n        self.name = name\n    def get_name(self):\n        return self.name\n",
+                "test_cases": [
+                    {"call": "Person('Alice').get_name()", "expected": "Alice", "description": "Person get_name returns Alice"},
+                    {"call": "Person('Bob').get_name()", "expected": "Bob", "description": "Person get_name returns Bob"}
+                ]
+            },
+            "medium": {
+                "id": "OOP_Code_Medium_1",
+                "difficulty": "medium",
+                "problem": "Write a class BankAccount with methods deposit(amount), withdraw(amount), and get_balance(). Initial balance should be 0. Withdraw should return False if insufficient funds, else True.",
+                "template": "class BankAccount:\n    def __init__(self):\n        self.balance = 0\n    def deposit(self, amount):\n        if amount > 0:\n            self.balance += amount\n    def withdraw(self, amount):\n        if 0 < amount <= self.balance:\n            self.balance -= amount\n            return True\n        return False\n    def get_balance(self):\n        return self.balance\n",
+                "test_cases": [
+                    {"call": "acc = BankAccount(); acc.deposit(100); acc.withdraw(30); acc.get_balance()", "expected": 70, "description": "Deposit and valid withdraw"},
+                    {"call": "acc = BankAccount(); acc.withdraw(50)", "expected": False, "description": "Withdraw with insufficient funds returns False"}
+                ]
+            },
+            "hard": {
+                "id": "OOP_Code_Hard_1",
+                "difficulty": "hard",
+                "problem": "Create a base class Vehicle(brand, model) and a subclass ElectricCar(brand, model, battery_kwh) that has a method get_specs() returning a dict {'brand': ..., 'model': ..., 'battery_kwh': ...}.",
+                "template": "class Vehicle:\n    def __init__(self, brand, model):\n        self.brand = brand\n        self.model = model\n\nclass ElectricCar(Vehicle):\n    def __init__(self, brand, model, battery_kwh):\n        super().__init__(brand, model)\n        self.battery_kwh = battery_kwh\n    def get_specs(self):\n        return {\n            'brand': self.brand,\n            'model': self.model,\n            'battery_kwh': self.battery_kwh\n        }\n",
+                "test_cases": [
+                    {"call": "ElectricCar('Tesla', 'Model 3', 75).get_specs()", "expected": {"brand": "Tesla", "model": "Model 3", "battery_kwh": 75}, "description": "Inheritance specs dictionary"}
+                ]
+            }
+        }
+    }
+}
+
+target_path = os.path.join("data", "reference_answers.json")
+with open(target_path, "w", encoding="utf-8") as f:
+    json.dump(reference_answers, f, indent=2)
+
+print(f"Successfully generated overhauled reference answers at {target_path}!")

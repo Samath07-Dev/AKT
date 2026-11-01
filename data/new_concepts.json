@@ -1,0 +1,534 @@
+{
+  "Dictionaries": {
+    "mcqs": {
+      "easy": [
+        {
+          "id": "Dictionaries_MCQ_Easy_1",
+          "difficulty": "easy",
+          "question": "How do you create an empty dictionary in Python?",
+          "options": ["A) dict = []", "B) dict = {}", "C) dict = ()", "D) dict = set()"],
+          "correct_option": "B"
+        },
+        {
+          "id": "Dictionaries_MCQ_Easy_2",
+          "difficulty": "easy",
+          "question": "What does `my_dict.get('key', 'default')` return if 'key' is not in `my_dict`?",
+          "options": ["A) None", "B) KeyError is raised", "C) 'default'", "D) False"],
+          "correct_option": "C"
+        },
+        {
+          "id": "Dictionaries_MCQ_Easy_3",
+          "difficulty": "easy",
+          "question": "Which method returns all the keys of a dictionary?",
+          "options": ["A) .values()", "B) .items()", "C) .keys()", "D) .elements()"],
+          "correct_option": "C"
+        }
+      ],
+      "medium": [
+        {
+          "id": "Dictionaries_MCQ_Medium_1",
+          "difficulty": "medium",
+          "question": "What is the output of `{x: x**2 for x in range(4)}`?",
+          "options": ["A) {0: 0, 1: 1, 2: 4, 3: 9}", "B) {1: 1, 2: 4, 3: 9}", "C) [0, 1, 4, 9]", "D) {0: 0, 1: 2, 2: 4, 3: 6}"],
+          "correct_option": "A"
+        },
+        {
+          "id": "Dictionaries_MCQ_Medium_2",
+          "difficulty": "medium",
+          "question": "What does `dict.items()` return?",
+          "options": ["A) A list of keys", "B) A list of values", "C) A view object of (key, value) tuples", "D) A generator of keys"],
+          "correct_option": "C"
+        },
+        {
+          "id": "Dictionaries_MCQ_Medium_3",
+          "difficulty": "medium",
+          "question": "Which of the following can NOT be used as a dictionary key?",
+          "options": ["A) A tuple of integers", "B) A string", "C) A list", "D) An integer"],
+          "correct_option": "C"
+        }
+      ],
+      "hard": [
+        {
+          "id": "Dictionaries_MCQ_Hard_1",
+          "difficulty": "hard",
+          "question": "Given `a = {'x': 1}` and `b = {'y': 2}`, what does `{**a, **b, 'x': 3}` produce?",
+          "options": ["A) {'x': 1, 'y': 2}", "B) {'x': 3, 'y': 2}", "C) {'y': 2, 'x': 3}", "D) A TypeError"],
+          "correct_option": "B"
+        },
+        {
+          "id": "Dictionaries_MCQ_Hard_2",
+          "difficulty": "hard",
+          "question": "What is the output of the following code?\n```python\nfrom collections import defaultdict\nd = defaultdict(list)\nd['a'].append(1)\nd['a'].append(2)\nprint(d['b'])\n```",
+          "options": ["A) KeyError", "B) None", "C) []", "D) [1, 2]"],
+          "correct_option": "C"
+        },
+        {
+          "id": "Dictionaries_MCQ_Hard_3",
+          "difficulty": "hard",
+          "question": "In Python 3.9+, what does the `|` operator do when applied to two dictionaries `a | b`?",
+          "options": ["A) Computes the set union of their keys", "B) Returns a new merged dictionary with b's values taking priority", "C) Raises a TypeError", "D) Returns a list of tuples from both dicts"],
+          "correct_option": "B"
+        }
+      ]
+    },
+    "short_answer": {
+      "easy": {
+        "id": "Dictionaries_SA_Easy_1",
+        "difficulty": "easy",
+        "question": "Explain the difference between accessing a dictionary value with `d['key']` versus `d.get('key')`. When would you prefer one over the other?",
+        "reference_answer": "Using `d['key']` raises a `KeyError` if the key does not exist, while `d.get('key')` returns `None` (or a specified default value) when the key is missing. You should prefer `.get()` when you are unsure whether a key exists and want to avoid an exception, and use bracket notation when you expect the key to be present and want a clear error if it is not."
+      },
+      "medium": {
+        "id": "Dictionaries_SA_Medium_1",
+        "difficulty": "medium",
+        "question": "What does it mean for a type to be 'hashable' in Python, and why is hashability required for dictionary keys? Give an example of a hashable and an unhashable type.",
+        "reference_answer": "A hashable object has a hash value that never changes during its lifetime and can be compared to other objects. Dictionary keys must be hashable because Python uses hash tables internally to store and look up keys efficiently. Strings, integers, and tuples (containing only hashable elements) are hashable. Lists, sets, and other dictionaries are unhashable because they are mutable and their contents can change, which would invalidate their hash value."
+      },
+      "hard": {
+        "id": "Dictionaries_SA_Hard_1",
+        "difficulty": "hard",
+        "question": "Explain how `collections.defaultdict` works internally. How does it differ from using `dict.setdefault()`? Provide a use case where `defaultdict` is clearly more convenient.",
+        "reference_answer": "A `defaultdict` overrides the `__missing__` method so that when a missing key is accessed, it calls a factory function (passed at construction) to create a default value, inserts that value into the dict, and returns it. `dict.setdefault(key, default)` does something similar but requires you to pass the default value on every access call, making code more verbose. `defaultdict` is more convenient when grouping items: for example, `d = defaultdict(list); for item in data: d[item.category].append(item)` is cleaner than calling `d.setdefault(item.category, []).append(item)` repeatedly, especially when the factory is complex."
+      }
+    },
+    "coding": {
+      "easy": {
+        "id": "Dictionaries_Code_Easy_1",
+        "difficulty": "easy",
+        "problem": "Write a function `count_characters(s)` that takes a string `s` and returns a dictionary mapping each character to the number of times it appears in the string.",
+        "template": "def count_characters(s):\n    counts = {}\n    for char in s:\n        counts[char] = counts.get(char, 0) + 1\n    return counts",
+        "test_cases": [
+          {
+            "call": "count_characters('hello')",
+            "expected": {"h": 1, "e": 1, "l": 2, "o": 1},
+            "description": "Basic string with repeated characters"
+          },
+          {
+            "call": "count_characters('')",
+            "expected": {},
+            "description": "Empty string returns empty dict"
+          },
+          {
+            "call": "count_characters('aaa')",
+            "expected": {"a": 3},
+            "description": "String with all same characters"
+          },
+          {
+            "call": "count_characters('ab cd')",
+            "expected": {"a": 1, "b": 1, " ": 1, "c": 1, "d": 1},
+            "description": "String with spaces"
+          }
+        ]
+      },
+      "medium": {
+        "id": "Dictionaries_Code_Medium_1",
+        "difficulty": "medium",
+        "problem": "Write a function `invert_dict(d)` that takes a dictionary and returns a new dictionary where the keys and values are swapped. If multiple keys in the original dict share the same value, the inverted dict should map that value to a list of the original keys (sorted alphabetically).",
+        "template": "def invert_dict(d):\n    inverted = {}\n    for key, value in d.items():\n        if value not in inverted:\n            inverted[value] = []\n        inverted[value].append(key)\n    # Flatten single-element lists and sort multi-element ones\n    result = {}\n    for k, v in inverted.items():\n        if len(v) == 1:\n            result[k] = v[0]\n        else:\n            result[k] = sorted(v)\n    return result",
+        "test_cases": [
+          {
+            "call": "invert_dict({'a': 1, 'b': 2, 'c': 3})",
+            "expected": {1: "a", 2: "b", 3: "c"},
+            "description": "Simple inversion with unique values"
+          },
+          {
+            "call": "invert_dict({'a': 1, 'b': 1, 'c': 2})",
+            "expected": {1: ["a", "b"], 2: "c"},
+            "description": "Duplicate values should produce sorted list of keys"
+          },
+          {
+            "call": "invert_dict({})",
+            "expected": {},
+            "description": "Empty dict returns empty dict"
+          },
+          {
+            "call": "invert_dict({'x': 10})",
+            "expected": {10: "x"},
+            "description": "Single-entry dictionary"
+          }
+        ]
+      },
+      "hard": {
+        "id": "Dictionaries_Code_Hard_1",
+        "difficulty": "hard",
+        "problem": "Write a function `deep_merge(dict1, dict2)` that recursively merges two nested dictionaries. When both dicts have the same key and both corresponding values are themselves dictionaries, merge them recursively. Otherwise, values from `dict2` should overwrite those from `dict1`. Neither input dict should be modified.",
+        "template": "def deep_merge(dict1, dict2):\n    result = dict1.copy()\n    for key, value in dict2.items():\n        if key in result and isinstance(result[key], dict) and isinstance(value, dict):\n            result[key] = deep_merge(result[key], value)\n        else:\n            result[key] = value\n    return result",
+        "test_cases": [
+          {
+            "call": "deep_merge({'a': 1, 'b': {'x': 10}}, {'b': {'y': 20}, 'c': 3})",
+            "expected": {"a": 1, "b": {"x": 10, "y": 20}, "c": 3},
+            "description": "Nested dicts are merged recursively"
+          },
+          {
+            "call": "deep_merge({'a': {'b': {'c': 1}}}, {'a': {'b': {'d': 2}}})",
+            "expected": {"a": {"b": {"c": 1, "d": 2}}},
+            "description": "Deeply nested merge"
+          },
+          {
+            "call": "deep_merge({'a': 1}, {'a': 2})",
+            "expected": {"a": 2},
+            "description": "dict2 values overwrite dict1 for non-dict conflicts"
+          },
+          {
+            "call": "deep_merge({}, {'a': 1})",
+            "expected": {"a": 1},
+            "description": "Merging into empty dict"
+          },
+          {
+            "call": "deep_merge({'a': {'b': 1}}, {'a': 5})",
+            "expected": {"a": 5},
+            "description": "Non-dict value in dict2 overwrites dict in dict1"
+          }
+        ]
+      }
+    }
+  },
+  "File Handling": {
+    "mcqs": {
+      "easy": [
+        {
+          "id": "FileHandling_MCQ_Easy_1",
+          "difficulty": "easy",
+          "question": "Which built-in function is used to open a file in Python?",
+          "options": ["A) file()", "B) open()", "C) read()", "D) load()"],
+          "correct_option": "B"
+        },
+        {
+          "id": "FileHandling_MCQ_Easy_2",
+          "difficulty": "easy",
+          "question": "What is the default mode when opening a file with `open('file.txt')`?",
+          "options": ["A) 'w' (write)", "B) 'a' (append)", "C) 'r' (read)", "D) 'rb' (read binary)"],
+          "correct_option": "C"
+        },
+        {
+          "id": "FileHandling_MCQ_Easy_3",
+          "difficulty": "easy",
+          "question": "What is the primary advantage of using `with open('file.txt') as f:` instead of `f = open('file.txt')`?",
+          "options": ["A) It reads the file faster", "B) It automatically closes the file when the block exits", "C) It allows writing to read-only files", "D) It encrypts the file contents"],
+          "correct_option": "B"
+        }
+      ],
+      "medium": [
+        {
+          "id": "FileHandling_MCQ_Medium_1",
+          "difficulty": "medium",
+          "question": "What is the difference between `.read()` and `.readlines()` on a file object?",
+          "options": ["A) .read() returns a string; .readlines() returns a list of strings", "B) .read() returns a list; .readlines() returns a string", "C) They are identical", "D) .read() reads one character; .readlines() reads one line"],
+          "correct_option": "A"
+        },
+        {
+          "id": "FileHandling_MCQ_Medium_2",
+          "difficulty": "medium",
+          "question": "What does opening a file in mode `'a'` do?",
+          "options": ["A) Opens the file for reading only", "B) Overwrites the file contents", "C) Opens the file for appending; writes are added to the end", "D) Opens the file in binary mode"],
+          "correct_option": "C"
+        },
+        {
+          "id": "FileHandling_MCQ_Medium_3",
+          "difficulty": "medium",
+          "question": "Which module provides an object-oriented interface for filesystem paths in Python?",
+          "options": ["A) os.path", "B) sys", "C) pathlib", "D) shutil"],
+          "correct_option": "C"
+        }
+      ],
+      "hard": [
+        {
+          "id": "FileHandling_MCQ_Hard_1",
+          "difficulty": "hard",
+          "question": "What happens if you open a file in `'w'` mode and the file already exists?",
+          "options": ["A) A FileExistsError is raised", "B) Data is appended to the existing content", "C) The file is truncated (emptied) and opened for writing", "D) The file is opened in read-only mode"],
+          "correct_option": "C"
+        },
+        {
+          "id": "FileHandling_MCQ_Hard_2",
+          "difficulty": "hard",
+          "question": "When reading a CSV file with Python's `csv.reader`, what does the `delimiter` parameter control?",
+          "options": ["A) The character used to quote fields", "B) The character used to separate fields in a row", "C) The character used to end a row", "D) The encoding of the file"],
+          "correct_option": "B"
+        },
+        {
+          "id": "FileHandling_MCQ_Hard_3",
+          "difficulty": "hard",
+          "question": "What is the key difference between opening a file in `'r'` mode vs `'rb'` mode?",
+          "options": ["A) 'rb' is faster for reading", "B) 'r' decodes bytes to a str using an encoding; 'rb' returns raw bytes without decoding", "C) 'rb' allows writing while 'r' does not", "D) There is no difference in Python 3"],
+          "correct_option": "B"
+        }
+      ]
+    },
+    "short_answer": {
+      "easy": {
+        "id": "FileHandling_SA_Easy_1",
+        "difficulty": "easy",
+        "question": "Explain what a context manager is in the context of file handling and why the `with` statement is preferred for opening files.",
+        "reference_answer": "A context manager is an object that defines `__enter__` and `__exit__` methods, allowing setup and cleanup actions to happen automatically. When used with the `with` statement for file handling, the file is guaranteed to be properly closed when the block exits, even if an exception occurs. This is preferred over manually calling `f.close()` because it prevents resource leaks and makes the code more concise and less error-prone."
+      },
+      "medium": {
+        "id": "FileHandling_SA_Medium_1",
+        "difficulty": "medium",
+        "question": "Explain the differences between `.read()`, `.readline()`, and `.readlines()` methods on a file object. When would each be appropriate?",
+        "reference_answer": "`.read()` reads the entire file content as a single string (or bytes in binary mode) and is useful for small files. `.readline()` reads one line at a time (including the newline character) and is useful when you want to process a file line by line without loading it all into memory. `.readlines()` reads all lines and returns them as a list of strings. For large files, iterating over the file object directly (`for line in f:`) is more memory-efficient than `.readlines()` since it reads one line at a time using an internal buffer."
+      },
+      "hard": {
+        "id": "FileHandling_SA_Hard_1",
+        "difficulty": "hard",
+        "question": "Compare `os.path` and `pathlib` for path manipulation in Python. What advantages does `pathlib.Path` offer? Provide an example showing the same operation with both approaches.",
+        "reference_answer": "`os.path` uses string-based functions (e.g., `os.path.join()`, `os.path.exists()`) which can be verbose and harder to chain. `pathlib.Path` provides an object-oriented interface where paths are objects with methods and operators. Advantages of `pathlib` include: the `/` operator for joining paths (`Path('a') / 'b' / 'c.txt'` vs `os.path.join('a', 'b', 'c.txt')`), chaining methods (`path.parent.name`), built-in glob support (`path.glob('*.py')`), and reading/writing shortcuts (`path.read_text()`, `path.write_text()`). For example, checking if a file exists: `os.path.exists('/some/file.txt')` vs `Path('/some/file.txt').exists()`. `pathlib` is generally recommended for new code since Python 3.4+."
+      }
+    },
+    "coding": {
+      "easy": {
+        "id": "FileHandling_Code_Easy_1",
+        "difficulty": "easy",
+        "problem": "Write a function `count_lines(filepath)` that takes a file path as a string and returns the number of non-empty lines in the file. A line is considered empty if it contains only whitespace.",
+        "template": "def count_lines(filepath):\n    count = 0\n    with open(filepath, 'r') as f:\n        for line in f:\n            if line.strip():\n                count += 1\n    return count",
+        "test_cases": [
+          {
+            "call": "count_lines('test_file_1.txt')",
+            "expected": 3,
+            "description": "File with 3 non-empty lines and 1 empty line. Contents: 'hello\\n\\nworld\\nfoo\\n'"
+          },
+          {
+            "call": "count_lines('test_file_2.txt')",
+            "expected": 0,
+            "description": "File with only empty/whitespace lines. Contents: '\\n  \\n\\n'"
+          },
+          {
+            "call": "count_lines('test_file_3.txt')",
+            "expected": 1,
+            "description": "File with a single non-empty line. Contents: 'single line'"
+          }
+        ]
+      },
+      "medium": {
+        "id": "FileHandling_Code_Medium_1",
+        "difficulty": "medium",
+        "problem": "Write a function `read_csv_as_dicts(filepath)` that reads a CSV file and returns a list of dictionaries, where each dictionary represents a row with column headers as keys. Use the built-in `csv` module. Assume the first row is the header.",
+        "template": "import csv\n\ndef read_csv_as_dicts(filepath):\n    with open(filepath, 'r', newline='') as f:\n        reader = csv.DictReader(f)\n        return [dict(row) for row in reader]",
+        "test_cases": [
+          {
+            "call": "read_csv_as_dicts('test_data.csv')",
+            "expected": [{"name": "Alice", "age": "30"}, {"name": "Bob", "age": "25"}],
+            "description": "CSV with headers 'name,age' and two data rows"
+          },
+          {
+            "call": "read_csv_as_dicts('test_single.csv')",
+            "expected": [{"id": "1", "value": "hello"}],
+            "description": "CSV with one data row"
+          },
+          {
+            "call": "read_csv_as_dicts('test_empty.csv')",
+            "expected": [],
+            "description": "CSV with only a header row and no data"
+          }
+        ]
+      },
+      "hard": {
+        "id": "FileHandling_Code_Hard_1",
+        "difficulty": "hard",
+        "problem": "Write a function `merge_json_files(filepaths, output_path)` that takes a list of JSON file paths, where each file contains a JSON object (dict). It should merge all the dicts (later files override earlier ones for duplicate keys) and write the result to `output_path`. Return the merged dictionary. Use `json` module.",
+        "template": "import json\n\ndef merge_json_files(filepaths, output_path):\n    merged = {}\n    for filepath in filepaths:\n        with open(filepath, 'r') as f:\n            data = json.load(f)\n            merged.update(data)\n    with open(output_path, 'w') as f:\n        json.dump(merged, f, indent=2)\n    return merged",
+        "test_cases": [
+          {
+            "call": "merge_json_files(['f1.json', 'f2.json'], 'out.json')",
+            "expected": {"a": 1, "b": 2, "c": 3},
+            "description": "f1.json has {'a': 1, 'b': 2}, f2.json has {'c': 3}. No overlapping keys."
+          },
+          {
+            "call": "merge_json_files(['f1.json', 'f2.json'], 'out.json')",
+            "expected": {"a": 99, "b": 2},
+            "description": "f1.json has {'a': 1, 'b': 2}, f2.json has {'a': 99}. Later file overrides."
+          },
+          {
+            "call": "merge_json_files(['f1.json'], 'out.json')",
+            "expected": {"x": 10},
+            "description": "Single file f1.json with {'x': 10}. Trivial merge."
+          },
+          {
+            "call": "merge_json_files(['f1.json', 'f2.json', 'f3.json'], 'out.json')",
+            "expected": {"a": 3, "b": 2, "c": 3},
+            "description": "Three files with progressive overrides: f1={'a':1,'b':2}, f2={'a':2,'c':3}, f3={'a':3}"
+          }
+        ]
+      }
+    }
+  },
+  "Exception Handling": {
+    "mcqs": {
+      "easy": [
+        {
+          "id": "ExceptionHandling_MCQ_Easy_1",
+          "difficulty": "easy",
+          "question": "Which block of code runs only if no exception was raised in the `try` block?",
+          "options": ["A) except", "B) finally", "C) else", "D) raise"],
+          "correct_option": "C"
+        },
+        {
+          "id": "ExceptionHandling_MCQ_Easy_2",
+          "difficulty": "easy",
+          "question": "What exception is raised when you try to access a dictionary key that does not exist using bracket notation?",
+          "options": ["A) ValueError", "B) IndexError", "C) KeyError", "D) AttributeError"],
+          "correct_option": "C"
+        },
+        {
+          "id": "ExceptionHandling_MCQ_Easy_3",
+          "difficulty": "easy",
+          "question": "What does the `finally` block do in a `try`/`except`/`finally` statement?",
+          "options": ["A) It runs only if an exception was raised", "B) It runs only if no exception was raised", "C) It runs regardless of whether an exception was raised or not", "D) It re-raises the exception"],
+          "correct_option": "C"
+        }
+      ],
+      "medium": [
+        {
+          "id": "ExceptionHandling_MCQ_Medium_1",
+          "difficulty": "medium",
+          "question": "What is the output of the following code?\n```python\ntry:\n    x = 1 / 0\nexcept ZeroDivisionError:\n    print('A')\nelse:\n    print('B')\nfinally:\n    print('C')\n```",
+          "options": ["A) A", "B) A C", "C) B C", "D) A B C"],
+          "correct_option": "B"
+        },
+        {
+          "id": "ExceptionHandling_MCQ_Medium_2",
+          "difficulty": "medium",
+          "question": "Why is using a bare `except:` clause (without specifying an exception type) considered bad practice?",
+          "options": ["A) It causes a SyntaxError in Python 3", "B) It catches all exceptions including SystemExit and KeyboardInterrupt, hiding bugs", "C) It does not catch any exceptions", "D) It only catches ValueError"],
+          "correct_option": "B"
+        },
+        {
+          "id": "ExceptionHandling_MCQ_Medium_3",
+          "difficulty": "medium",
+          "question": "How do you define a custom exception class in Python?",
+          "options": ["A) class MyError(Error): pass", "B) class MyError(Exception): pass", "C) def MyError(Exception): pass", "D) exception MyError: pass"],
+          "correct_option": "B"
+        }
+      ],
+      "hard": [
+        {
+          "id": "ExceptionHandling_MCQ_Hard_1",
+          "difficulty": "hard",
+          "question": "What does exception chaining with `raise ValueError('msg') from original_exception` do?",
+          "options": ["A) Replaces the original exception entirely", "B) Sets the `__cause__` attribute, creating an explicit chain showing the original exception", "C) Suppresses the original exception's traceback", "D) Logs the original exception and raises a new unrelated one"],
+          "correct_option": "B"
+        },
+        {
+          "id": "ExceptionHandling_MCQ_Hard_2",
+          "difficulty": "hard",
+          "question": "What does `contextlib.suppress(FileNotFoundError)` do when used as a context manager?",
+          "options": ["A) Raises FileNotFoundError if the file is not found", "B) Suppresses FileNotFoundError exceptions inside the `with` block, continuing execution", "C) Logs the FileNotFoundError to stderr", "D) Converts FileNotFoundError into a warning"],
+          "correct_option": "B"
+        },
+        {
+          "id": "ExceptionHandling_MCQ_Hard_3",
+          "difficulty": "hard",
+          "question": "What is the value of `e.__context__` in the following code?\n```python\ntry:\n    raise ValueError('first')\nexcept ValueError:\n    try:\n        raise TypeError('second')\n    except TypeError as e:\n        pass\n```",
+          "options": ["A) None", "B) ValueError('first')", "C) TypeError('second')", "D) A tuple of both exceptions"],
+          "correct_option": "B"
+        }
+      ]
+    },
+    "short_answer": {
+      "easy": {
+        "id": "ExceptionHandling_SA_Easy_1",
+        "difficulty": "easy",
+        "question": "Explain the purpose of each block in a `try`/`except`/`else`/`finally` statement. Provide a simple example.",
+        "reference_answer": "The `try` block contains code that might raise an exception. The `except` block handles specific exceptions if they occur. The `else` block runs only if no exception was raised in the `try` block, and is useful for code that should only execute on success. The `finally` block always runs regardless of whether an exception occurred, and is typically used for cleanup actions like closing files. Example:\n```python\ntry:\n    result = int(input('Enter a number: '))\nexcept ValueError:\n    print('Invalid input')\nelse:\n    print(f'You entered {result}')\nfinally:\n    print('Done')\n```"
+      },
+      "medium": {
+        "id": "ExceptionHandling_SA_Medium_1",
+        "difficulty": "medium",
+        "question": "When should you create a custom exception class instead of using built-in exceptions? Describe best practices for designing custom exceptions.",
+        "reference_answer": "Custom exception classes should be created when you need to represent domain-specific error conditions that built-in exceptions don't adequately describe, or when callers need to distinguish your library's errors from others. Best practices include: (1) Inherit from `Exception` (not `BaseException`), (2) Create a base exception for your package (e.g., `class MyLibError(Exception): pass`) and derive specific errors from it, (3) Add meaningful attributes (e.g., error codes, context data) via `__init__`, (4) Provide clear docstrings, and (5) Keep the hierarchy shallow. For example, a payment library might define `PaymentError` as a base, with `InsufficientFundsError` and `InvalidCardError` as subclasses."
+      },
+      "hard": {
+        "id": "ExceptionHandling_SA_Hard_1",
+        "difficulty": "hard",
+        "question": "Explain the difference between implicit and explicit exception chaining in Python. What are `__cause__` and `__context__`, and how does `raise X from Y` differ from `raise X from None`?",
+        "reference_answer": "Implicit chaining occurs when an exception is raised inside an `except` block: Python automatically sets the new exception's `__context__` to the original exception, and both tracebacks are displayed with 'During handling of the above exception, another exception occurred'. Explicit chaining uses `raise X from Y`, which sets `X.__cause__` to `Y` and displays 'The above exception was the direct cause of the following exception'. This makes the causal relationship intentional and clear. `raise X from None` sets `__cause__` to `None` and suppresses the implicit context, so only the new exception's traceback is shown. This is useful when the original exception is an implementation detail you don't want to expose to the caller."
+      }
+    },
+    "coding": {
+      "easy": {
+        "id": "ExceptionHandling_Code_Easy_1",
+        "difficulty": "easy",
+        "problem": "Write a function `safe_divide(a, b)` that returns the result of `a / b`. If `b` is zero, return the string `'Cannot divide by zero'`. If either argument is not a number (int or float), return `'Invalid input'`.",
+        "template": "def safe_divide(a, b):\n    try:\n        result = a / b\n    except ZeroDivisionError:\n        return 'Cannot divide by zero'\n    except TypeError:\n        return 'Invalid input'\n    else:\n        return result",
+        "test_cases": [
+          {
+            "call": "safe_divide(10, 2)",
+            "expected": 5.0,
+            "description": "Normal division"
+          },
+          {
+            "call": "safe_divide(10, 0)",
+            "expected": "Cannot divide by zero",
+            "description": "Division by zero"
+          },
+          {
+            "call": "safe_divide('a', 2)",
+            "expected": "Invalid input",
+            "description": "Non-numeric input"
+          },
+          {
+            "call": "safe_divide(7, 3)",
+            "expected": 2.3333333333333335,
+            "description": "Division with floating point result"
+          }
+        ]
+      },
+      "medium": {
+        "id": "ExceptionHandling_Code_Medium_1",
+        "difficulty": "medium",
+        "problem": "Write a function `parse_int_list(items)` that takes a list of values and returns a list of integers. For each item, attempt to convert it to an integer. If conversion fails, include the string `'error: <original_value>'` in the result instead. Use exception handling for the conversion attempts.",
+        "template": "def parse_int_list(items):\n    result = []\n    for item in items:\n        try:\n            result.append(int(item))\n        except (ValueError, TypeError):\n            result.append(f'error: {item}')\n    return result",
+        "test_cases": [
+          {
+            "call": "parse_int_list(['1', '2', '3'])",
+            "expected": [1, 2, 3],
+            "description": "All valid integer strings"
+          },
+          {
+            "call": "parse_int_list(['1', 'abc', '3', None, '5'])",
+            "expected": [1, "error: abc", 3, "error: None", 5],
+            "description": "Mix of valid and invalid values"
+          },
+          {
+            "call": "parse_int_list([])",
+            "expected": [],
+            "description": "Empty list"
+          },
+          {
+            "call": "parse_int_list(['10', '20.5', 'hello'])",
+            "expected": [10, "error: 20.5", "error: hello"],
+            "description": "Float string should fail int() conversion"
+          }
+        ]
+      },
+      "hard": {
+        "id": "ExceptionHandling_Code_Hard_1",
+        "difficulty": "hard",
+        "problem": "Write a retry decorator `retry(max_attempts, exceptions)` that retries a function call up to `max_attempts` times if it raises any of the specified `exceptions` (a tuple of exception types). If all attempts fail, raise the last exception. The decorator should work with any function signature.",
+        "template": "import functools\n\ndef retry(max_attempts, exceptions):\n    def decorator(func):\n        @functools.wraps(func)\n        def wrapper(*args, **kwargs):\n            last_exception = None\n            for attempt in range(max_attempts):\n                try:\n                    return func(*args, **kwargs)\n                except exceptions as e:\n                    last_exception = e\n            raise last_exception\n        return wrapper\n    return decorator",
+        "test_cases": [
+          {
+            "call": "retry_test_always_fails()",
+            "expected": "ValueError raised after 3 attempts",
+            "description": "Function that always raises ValueError with max_attempts=3 should raise after 3 tries"
+          },
+          {
+            "call": "retry_test_succeeds_on_third()",
+            "expected": "success",
+            "description": "Function that succeeds on third attempt with max_attempts=3 should return 'success'"
+          },
+          {
+            "call": "retry_test_immediate_success()",
+            "expected": 42,
+            "description": "Function that succeeds immediately should return on first attempt"
+          },
+          {
+            "call": "retry_test_wrong_exception()",
+            "expected": "TypeError raised immediately",
+            "description": "Function raising an exception not in the exceptions tuple should not be retried"
+          }
+        ]
+      }
+    }
+  }
+}
