@@ -1,0 +1,37 @@
+# Git and environments
+.git/
+.gitignore
+.env
+.env.*
+!.env.example
+.venv/
+.venv-isolated/
+.*venv*/
+
+# Frontend application (deployed separately on Vercel)
+frontend/
+
+# Local databases and raw research datasets
+mongodb-data/
+data/raw/
+*.csv
+*.archive.gz
+
+# Python cache & test files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+test_*.py
+conftest.py
+tests/
+
+# Temporary and local operational logs
+*.log
+*.log.*
+cookies.txt
+scratch/
+legacy/
+project_handover/
+RECOVERY.md
+*.tsbuildinfo

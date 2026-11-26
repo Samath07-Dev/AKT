@@ -30,6 +30,7 @@ import logging
 from argon2 import PasswordHasher, Type
 from argon2.exceptions import VerificationError, InvalidHash
 from fastapi import FastAPI, HTTPException, Query, Header, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Dict, List, Optional, Any, Tuple
 import numpy as np
@@ -199,6 +200,25 @@ app = FastAPI(
     description="Multi-Response Student Behaviour Modeling & Uncertainty-Guided Adaptive Learning Engine API with Difficulty Scaffolding",
     version="2.0.0",
     lifespan=lifespan
+)
+
+# CORS Configuration for Vercel, localhost, and custom frontend domains
+ALLOWED_ORIGINS_RAW = os.getenv("ALLOWED_ORIGINS", "")
+_custom_origins = [orig.strip() for orig in ALLOWED_ORIGINS_RAW.split(",") if orig.strip()]
+_default_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+_allowed_origins = list(set(_default_origins + _custom_origins))
+_allowed_origin_regex = os.getenv("ALLOWED_ORIGIN_REGEX", r"^https:\/\/.*\.vercel\.app$")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_allowed_origins,
+    allow_origin_regex=_allowed_origin_regex,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # MongoDB Configuration & Motor Async Client
