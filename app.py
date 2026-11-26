@@ -9,7 +9,7 @@ server = Server()
 def ping() -> str:
     return "OK"
 
-server.mount("/", fastapi_app)
+server.mount("/api", fastapi_app)
 
 if __name__ == "__main__":
     server.launch(server_name="0.0.0.0", server_port=7860)
