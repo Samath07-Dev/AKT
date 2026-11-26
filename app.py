@@ -1,19 +1,15 @@
 import spaces
-import gradio as gr
-import uvicorn
+from gradio import Server
 from api import app as fastapi_app
 
+server = Server()
+
 @spaces.GPU
-def _noop():
+@server.api(name="ping")
+def ping() -> str:
     return "OK"
 
-with gr.Blocks() as demo:
-    gr.Markdown("## AKT Backend API")
-    btn = gr.Button("Ping")
-    out = gr.Textbox()
-    btn.click(_noop, outputs=out)
-
-app = gr.mount_gradio_app(fastapi_app, demo, path="/gradio")
+server.mount("/", fastapi_app)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=7860, proxy_headers=True, forwarded_allow_ips="*")
+    server.launch(server_name="0.0.0.0", server_port=7860)
