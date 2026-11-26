@@ -1,0 +1,752 @@
+{
+  "Variables_MCQ_Easy_1": [
+    "Review Python's identifier naming conventions regarding allowed starting characters and reserved words.",
+    "Valid variable names can only contain letters, digits, and underscores, and they cannot begin with a numeric digit.",
+    "Examine which choice avoids reserved statement keywords and hyphens while beginning with an alphabetic character."
+  ],
+  "Variables_MCQ_Easy_2": [
+    "Notice the augmented assignment operator '+=' applied to variable x.",
+    "The statement 'x += 3' recalculates x by adding the right operand to the variable's current value.",
+    "Consider what new integer is stored when the initial value of 5 is incremented by 3."
+  ],
+  "Variables_MCQ_Easy_3": [
+    "Recall how Python categorizes numbers with fractional or decimal components.",
+    "Python distinguishes whole-number integers from floating-point numeric representations.",
+    "Consider the standard type name Python uses for real numbers with decimals, distinct from C-style names like 'double'."
+  ],
+  "Variables_SA_Easy_1": [
+    "Think about what happens in computer memory when a program stores and retrieves information.",
+    "Contrast a human-readable identifier name with the underlying memory location that holds the data value.",
+    "Focus your explanation on naming, memory allocation, and the ability to reference and reassign values dynamically throughout program execution."
+  ],
+  "Variables_Code_Easy_1": [
+    "Define a function named sum_two_numbers that accepts two positional arguments.",
+    "Use Python's arithmetic addition operator to combine the two parameters.",
+    "Return the calculated sum so the caller receives the combined numeric value."
+  ],
+  "Variables_MCQ_Medium_1": [
+    "Recall how Python evaluates tuple packing and unpacking in simultaneous assignments.",
+    "The entire right-hand side is evaluated first as a temporary tuple using the variables' current values before any assignment occurs.",
+    "Determine the contents of the temporary tuple using the original values of both variables, then assign the first item to a and the second item to b."
+  ],
+  "Variables_MCQ_Medium_2": [
+    "Review truth-value testing rules across collections versus strings in Python.",
+    "Any empty collection evaluates to a falsy condition, whereas strings are judged purely by length rather than contents.",
+    "Check whether each argument is empty: an empty list has zero elements, while a string with characters—even spelling out 'False'—is non-empty."
+  ],
+  "Variables_MCQ_Medium_3": [
+    "Consider Python's variable reference model for mutable objects like lists.",
+    "Assigning 'y = x' creates an alias pointing to the same underlying list object in memory rather than creating a clone.",
+    "When a mutating method modifies an aliased list, consider whether the change is visible through every variable referencing that list."
+  ],
+  "Variables_SA_Medium_1": [
+    "Consider when type checks occur in Python compared to compiled, statically typed languages.",
+    "Explain the distinction between variable names as reference pointers and the actual typed objects residing in memory.",
+    "Describe how rebinding a variable to a different type updates its reference pointer to a new object, leaving the unreferenced object for garbage collection."
+  ],
+  "Variables_Code_Medium_1": [
+    "Check the unit argument and branch based on whether Celsius ('C') or Fahrenheit ('F') was specified.",
+    "Apply the standard temperature conversion formula for the matching unit and handle uppercase or lowercase inputs.",
+    "Use the built-in round function to format the final converted float to two decimal places before returning."
+  ],
+  "Variables_MCQ_Hard_1": [
+    "Recall how Python determines variable scope during bytecode compilation.",
+    "When an assignment statement exists inside a function body, the interpreter marks that variable as local throughout the entire function.",
+    "Accessing a local variable name prior to its assignment statement prevents falling back to the global scope and triggers a specific local scoping error."
+  ],
+  "Variables_MCQ_Hard_2": [
+    "Distinguish between value equality ('==') and object identity ('is') in Python.",
+    "CPython pre-allocates and caches singleton integer objects within a specific small integer range to optimize memory.",
+    "For integers within this inclusive boundary, multiple assignments reference the exact same object in memory, causing identity checks to evaluate as true."
+  ],
+  "Variables_MCQ_Hard_3": [
+    "Review Python's scoping rules when working with nested (inner) functions.",
+    "Contrast 'global', which targets module-level scope, with a keyword that targets intermediate enclosing function scopes.",
+    "This keyword allows an inner function to rebind a variable that belongs to an outer enclosing function without declaring it at module level."
+  ],
+  "Variables_SA_Hard_1": [
+    "Break down what each letter in the LEGB acronym stands for in Python scope resolution.",
+    "Explain the sequential order the interpreter follows when resolving an identifier name.",
+    "Discuss how 'global' and 'nonlocal' explicitly override standard LEGB resolution by targeting module or enclosing namespaces directly."
+  ],
+  "Variables_Code_Hard_1": [
+    "Iterate through key-value pairs of the input dictionary and invert the mapping.",
+    "Since multiple keys may share the same value, group keys into a list for each distinct value.",
+    "Ensure that grouped keys are accumulated, sort each grouped list in ascending order, and return the inverted dictionary."
+  ],
+  "Conditionals_MCQ_Easy_1": [
+    "Consider how numeric values are evaluated in boolean contexts.",
+    "Non-zero numbers represent presence and evaluate as truthy, whereas zero represents absence of quantity.",
+    "Think about whether the integer 0 behaves as a truthy or falsy value in Python conditions."
+  ],
+  "Conditionals_MCQ_Easy_2": [
+    "Recall the branching keywords available in Python control flow.",
+    "Python combines 'else' and 'if' into a concise single keyword rather than two separate words.",
+    "Look for the four-letter abbreviation used to chain multiple alternative conditions after an initial if statement."
+  ],
+  "Conditionals_MCQ_Easy_3": [
+    "Review boolean logic rules and operator precedence between logical operators.",
+    "The unary 'not' operator evaluates first to invert the truth value of its operand.",
+    "Once the right operand is inverted, evaluate whether both sides of the 'and' expression are truthy."
+  ],
+  "Conditionals_SA_Easy_1": [
+    "Describe the order in which Python evaluates chained conditional blocks.",
+    "Explain what happens when a condition evaluates to true versus when it evaluates to false.",
+    "Emphasize mutual exclusivity: only the first matching branch executes, skipping remaining branches, with 'else' serving as the fallback."
+  ],
+  "Conditionals_Code_Easy_1": [
+    "Consider the mathematical property that distinguishes even numbers from odd numbers.",
+    "Use the modulo operator '%' to find the remainder when dividing the number by two.",
+    "Compare the remainder to zero and return a boolean indicating whether there is zero remainder."
+  ],
+  "Conditionals_MCQ_Medium_1": [
+    "Review how Python parses and evaluates chained comparison operators.",
+    "Chained comparisons expand into pairwise comparisons connected by implicit logical 'and' operations.",
+    "Test whether all three sub-conditions—first pair, second pair, and third pair—hold true simultaneously."
+  ],
+  "Conditionals_MCQ_Medium_2": [
+    "Recall how Python's logical 'or' operator evaluates operands rather than returning boolean literals.",
+    "In an 'or' expression, Python evaluates the left operand first; if falsy, it proceeds to evaluate and return the right operand.",
+    "Check the truthiness of an empty list: because it is falsy, the expression yields the second operand without modification."
+  ],
+  "Conditionals_MCQ_Medium_3": [
+    "Examine the structure where a condition appears between two candidate expressions.",
+    "This construct is Python's inline conditional expression, evaluating one value when true and an alternative when false.",
+    "Identify the name of this three-part conditional operator commonly used for concise assignments."
+  ],
+  "Conditionals_SA_Medium_1": [
+    "Define what short-circuit evaluation means regarding expression evaluation efficiency.",
+    "Explain how 'and' stops at the first falsy operand, whereas 'or' stops at the first truthy operand.",
+    "Discuss practical advantages: preventing runtime errors (such as attribute access on None) and skipping unnecessary computational calls."
+  ],
+  "Conditionals_Code_Medium_1": [
+    "First verify the triangle inequality theorem: the sum of any two sides must be strictly greater than the third side.",
+    "If the sides fail the inequality or are non-positive, return 'Invalid'.",
+    "If valid, compare the side lengths: three equal sides yield 'Equilateral', two equal yield 'Isosceles', and all distinct yield 'Scalene'."
+  ],
+  "Conditionals_MCQ_Hard_1": [
+    "Trace the execution order of the logical 'or' operator with truthy left operands.",
+    "A non-empty string evaluates as a truthy value in Python.",
+    "Determine whether Python needs to evaluate the right-hand function call when the left-hand function has already satisfied the 'or' condition."
+  ],
+  "Conditionals_MCQ_Hard_2": [
+    "Review structural pattern matching syntax introduced in Python 3.10.",
+    "In a match-case statement, consider which pattern matches any value that failed previous specific case patterns.",
+    "The underscore pattern functions as a wildcard pattern, acting similarly to a default else branch."
+  ],
+  "Conditionals_MCQ_Hard_3": [
+    "Apply operator precedence to the expression inside the parentheses: 'and' has higher precedence than 'or'.",
+    "First evaluate the 'and' sub-expression, then combine that result with the left side using 'or'.",
+    "Finally, apply the outer 'not' operator to invert the overall boolean value resulting from the parenthesized expression."
+  ],
+  "Conditionals_SA_Hard_1": [
+    "Compare traditional boolean-driven branching with structural pattern matching.",
+    "Explain that match-case destructures data shapes, sequences, and mappings rather than just checking boolean conditions.",
+    "Highlight features such as guard clauses and pattern bindings that streamline complex conditional data unpacking."
+  ],
+  "Conditionals_Code_Hard_1": [
+    "Verify length is at least 8 characters and check for presence of required character categories.",
+    "Check for uppercase, lowercase, digits, and special characters from the specified allowed set.",
+    "Ensure all conditions must pass simultaneously using boolean logic or any() checks before returning true."
+  ],
+  "Loops_MCQ_Easy_1": [
+    "Recall the start, stop, and step defaults for the single-argument range() function.",
+    "range(n) generates numbers starting from 0 up to n - 1.",
+    "Count how many individual numbers are in the sequence generated when the stop parameter is 3."
+  ],
+  "Loops_MCQ_Easy_2": [
+    "Distinguish between the keywords used to alter standard loop iteration.",
+    "Contrast skipping to the next iteration with abandoning the entire loop construct immediately.",
+    "Identify the five-letter statement designed specifically to terminate the nearest enclosing loop."
+  ],
+  "Loops_MCQ_Easy_3": [
+    "Review range(start, stop) behavior regarding endpoint inclusivity.",
+    "The starting number is included, but the stop number is strictly excluded from the sequence.",
+    "List the integers beginning at 1 and stopping just before reaching 5."
+  ],
+  "Loops_SA_Easy_1": [
+    "Contrast definite iteration with indefinite or condition-dependent iteration.",
+    "Explain that for loops iterate through an iterable collection, while while loops repeat as long as a condition evaluates to true.",
+    "Discuss use cases: for loops for known bounds or sequences; while loops for event loops, user input, or unknown stopping criteria."
+  ],
+  "Loops_Code_Easy_1": [
+    "Initialize an accumulator variable to zero before starting the loop.",
+    "Iterate through numbers from 1 through n inclusive using range().",
+    "Add each number to the running total on each pass, and return the accumulated sum after the loop finishes."
+  ],
+  "Loops_MCQ_Medium_1": [
+    "Examine Python's unique 'else' clause attached to for and while loops.",
+    "The else clause executes when the loop finishes its iterations normally without early termination.",
+    "Determine which flow-control statement, when executed inside the loop, causes the attached else block to be skipped."
+  ],
+  "Loops_MCQ_Medium_2": [
+    "Review the three-argument range(start, stop, step) with a negative step value.",
+    "Start at 10 and subtract 3 on each iteration while the value remains strictly greater than the stop value 0.",
+    "Trace each step down from 10, decrementing by 3 repeatedly until the next candidate would reach or pass below 0."
+  ],
+  "Loops_MCQ_Medium_3": [
+    "Differentiate between statements that stop a loop and statements that advance a loop.",
+    "The continue statement bypasses the remaining code in the loop body for the current pass only.",
+    "Think about whether execution stops completely or jumps straight to evaluating the next iteration."
+  ],
+  "Loops_SA_Medium_1": [
+    "Explain that loop 'else' executes only when the iteration sequence is exhausted naturally.",
+    "Clarify that breaking out of the loop early with 'break' bypasses the else block entirely.",
+    "Give a concrete scenario, such as a search algorithm where 'break' marks a successful find and 'else' handles the not-found fallback."
+  ],
+  "Loops_Code_Medium_1": [
+    "Define a collection containing lowercase and uppercase vowels.",
+    "Loop through each character of the input string and test for membership in your vowel collection.",
+    "Increment a counter on each match and return the total count after checking the entire string."
+  ],
+  "Loops_MCQ_Hard_1": [
+    "Consider how Python manages internal index pointers while iterating over a list.",
+    "Removing elements shifts subsequent items leftward to lower index positions in real time.",
+    "Think about whether the iterator's internal index counter adapts to shifted positions or skips adjacent items."
+  ],
+  "Loops_MCQ_Hard_2": [
+    "Recall the built-in function that bundles items from multiple sequences into tuple pairs.",
+    "It pairs corresponding elements by index and stops when the shortest input iterable ends.",
+    "Identify the short built-in function named after a mechanical fastener."
+  ],
+  "Loops_MCQ_Hard_3": [
+    "Review how next() interacts with iterators when provided an optional default argument.",
+    "Calling next() on an exhausted iterator raises StopIteration unless a second argument is supplied.",
+    "Consider what value next() produces when the iterator is empty but a fallback default is specified."
+  ],
+  "Loops_SA_Hard_1": [
+    "Explain the two core dunder methods that form Python's iterator protocol: `__iter__` and `__next__`.",
+    "Describe how `__iter__` returns the iterator object and `__next__` retrieves the next item or raises StopIteration.",
+    "Detail how Python's for loop automatically invokes iter(), calls next() repeatedly, and catches StopIteration to terminate cleanly."
+  ],
+  "Loops_Code_Hard_1": [
+    "Iterate through potential prime candidates starting from 2 up to n.",
+    "For each candidate, check for divisors from 2 up to the square root of the candidate.",
+    "If no divisors divide the candidate evenly, record it as prime; return the list of collected primes."
+  ],
+  "Functions_MCQ_Easy_1": [
+    "Recall the keyword used to create a new user-defined function in Python.",
+    "Python uses a short three-letter abbreviation for 'define'.",
+    "Identify the keyword that precedes the function name and parameter list."
+  ],
+  "Functions_MCQ_Easy_2": [
+    "Consider what Python functions return when no explicit return statement is executed.",
+    "Python functions always return a value; in the absence of an explicit value, a built-in singleton object is returned.",
+    "Think about Python's special object that represents the absence of a value or empty reference."
+  ],
+  "Functions_MCQ_Easy_3": [
+    "Review how optional parameters are specified in function signatures using the '=' syntax.",
+    "Default parameters allow a caller to invoke the function without providing arguments for those specific parameters.",
+    "Consider what fallback value the function adopts when an argument is omitted by the caller."
+  ],
+  "Functions_SA_Easy_1": [
+    "Discuss how functions encourage modularity, code reuse, and separation of concerns.",
+    "Explain how breaking large programs into smaller, testable units reduces code duplication and improves readability.",
+    "Mention parameter inputs and return outputs as the defined interface between independent functional blocks."
+  ],
+  "Functions_Code_Easy_1": [
+    "Define a function that takes a name parameter.",
+    "Construct a greeting by joining 'Hello, ' with the provided name argument.",
+    "Return the combined greeting string so the caller receives the expected greeting message."
+  ],
+  "Functions_MCQ_Medium_1": [
+    "Review variable-length positional argument syntax in Python parameter lists.",
+    "The single asterisk collects excess positional arguments into an immutable sequence type.",
+    "Determine which built-in sequence data structure Python uses to store unpacked positional arguments."
+  ],
+  "Functions_MCQ_Medium_2": [
+    "Review variable-length keyword argument syntax in Python parameter lists.",
+    "The double asterisk collects named keyword arguments into an associative key-value mapping.",
+    "Identify the standard mapping data structure that stores the keyword names as keys and passed arguments as values."
+  ],
+  "Functions_MCQ_Medium_3": [
+    "Understand anonymous lambda functions and how arguments map to their parameter lists.",
+    "Substitute the arguments 3 and 4 into the parameters x and y in the arithmetic expression.",
+    "Compute the product of the two parameters and add two to find the evaluated result."
+  ],
+  "Functions_SA_Medium_1": [
+    "Explain how variable argument lists allow functions to accept an arbitrary number of inputs.",
+    "Contrast positional packing into a tuple (`*args`) with keyword packing into a dictionary (`**kwargs`).",
+    "Describe common design patterns where this flexibility is essential, such as decorator wrappers and subclass forwarding with super()."
+  ],
+  "Functions_Code_Medium_1": [
+    "Handle the base cases: factorial of 0 and 1 equals 1.",
+    "For n > 1, multiply integers consecutively from 1 up to n, or use a recursive function call.",
+    "Return the final accumulated integer product."
+  ],
+  "Functions_MCQ_Hard_1": [
+    "Consider when Python evaluates default parameter expressions in a function definition.",
+    "Default values are evaluated once when the function is defined, not anew on each function call.",
+    "Because mutable objects like lists retain in-place modifications, subsequent calls share and mutate the same object."
+  ],
+  "Functions_MCQ_Hard_2": [
+    "Identify the special keyword used in generator functions instead of 'return'.",
+    "Generator functions produce values lazily on-demand rather than building and returning an entire collection at once.",
+    "Think about how generators yield items one at a time and suspend execution state between iterations."
+  ],
+  "Functions_MCQ_Hard_3": [
+    "Recall how Python decorators wrap or modify the behavior of functions.",
+    "The '@' syntax is syntactic sugar for passing the decorated function as an argument to the decorator callable.",
+    "The decorator returns a replacement callable that executes before, around, or after the original function."
+  ],
+  "Functions_SA_Hard_1": [
+    "Define a closure as an inner function that retains access to variables from its enclosing scope even after the outer function finishes executing.",
+    "Explain the three conditions: nested function, reference to an enclosing non-global variable, and outer returning the inner function.",
+    "Discuss how closures enable data encapsulation, stateful functions without classes, and factory functions."
+  ],
+  "Functions_Code_Hard_1": [
+    "Create an outer decorator function and an internal cache mapping to store previously computed results.",
+    "Inside the wrapper function, check whether the passed arguments exist as a key in the cache.",
+    "If found, return the cached value; otherwise, call the original function, store the result in the cache, and return it."
+  ],
+  "Arrays_MCQ_Easy_1": [
+    "Review list methods used for element insertion in Python.",
+    "Differentiate between extending a list with multiple items and adding a single item to the end in-place.",
+    "Identify the common method name that appends an item to the end of an existing list."
+  ],
+  "Arrays_MCQ_Easy_2": [
+    "Recall how Python sequences support negative indices to access elements from the end.",
+    "While index 0 accesses the first element, negative indexing counts backward from the last element.",
+    "Determine which index value refers to the very last element of any non-empty list."
+  ],
+  "Arrays_MCQ_Easy_3": [
+    "Review sequence slicing syntax `[start:stop]` where start is inclusive and stop is exclusive.",
+    "Identify the element at index 1 and collect elements up to, but not including, index 4.",
+    "Determine the sublist consisting of elements at indices 1, 2, and 3."
+  ],
+  "Arrays_SA_Easy_1": [
+    "Explain that Python lists are ordered, mutable sequences that can store arbitrary and heterogeneous data types.",
+    "Contrast lists with immutable sequences like tuples and unordered collections like sets.",
+    "Highlight common list operations such as indexing, slicing, appending, and in-place element reassignment."
+  ],
+  "Arrays_Code_Easy_1": [
+    "Handle edge cases such as an empty list if necessary, or initialize a tracking variable to the first element.",
+    "Iterate through the numbers and compare each element against your current tracking variable.",
+    "Update the tracking variable whenever a greater value is encountered, and return the maximum value found."
+  ],
+  "Arrays_MCQ_Medium_1": [
+    "Analyze the slice syntax `[start:stop:step]` applied to the list.",
+    "Start at index 1, stop before index 5, and advance by a step of 2 each time.",
+    "Identify the values at index 1 and index 1 + 2 = 3, verifying that the next step falls outside the stop boundary."
+  ],
+  "Arrays_MCQ_Medium_2": [
+    "Break down the list comprehension into its loop, condition, and transformation components.",
+    "range(5) produces 0, 1, 2, 3, 4. The condition filters for numbers where remainder modulo 2 is non-zero (odd numbers).",
+    "Square each odd number in the range to determine the elements in the resulting list."
+  ],
+  "Arrays_MCQ_Medium_3": [
+    "Recall how the list method pop() operates on a list.",
+    "pop() modifies the list in-place and returns the removed element.",
+    "When no index argument is specified, consider which position in the list is removed and returned by default."
+  ],
+  "Arrays_SA_Medium_1": [
+    "Explain the purpose of each parameter in the slicing expression `sequence[start:stop:step]`.",
+    "Clarify that start is inclusive, stop is exclusive, and step determines the stride and direction.",
+    "Describe how a negative step value reverses sequence traversal or extracts elements backward from end to start."
+  ],
+  "Arrays_Code_Medium_1": [
+    "Maintain an ordered collection of unique items while keeping track of elements already encountered.",
+    "Use a set for fast lookup of seen items and a list to accumulate items in their original order.",
+    "Only append an element to your result list if it hasn't appeared yet in the seen set, updating the set accordingly."
+  ],
+  "Arrays_MCQ_Hard_1": [
+    "Consider how list multiplication `[row] * 2` creates copies of elements.",
+    "Multiplying a list containing a reference duplicates the reference to that same object rather than deep copying it.",
+    "Because both rows reference the exact same underlying list in memory, modifying an element in one row affects both rows."
+  ],
+  "Arrays_MCQ_Hard_2": [
+    "Think about how Python lists are stored in contiguous memory blocks.",
+    "Appending to the end utilizes pre-allocated buffer space, whereas inserting at the beginning requires shifting existing elements.",
+    "Compare constant amortized time O(1) for appends with linear time O(n) required to shift all n elements during index 0 insertion."
+  ],
+  "Arrays_MCQ_Hard_3": [
+    "Distinguish between shallow and deep copying of compound data structures.",
+    "A shallow copy constructs a new collection but populates it with references to the original nested child objects.",
+    "A deep copy recursively duplicates both the outer container and all nested objects, creating completely independent data hierarchies."
+  ],
+  "Arrays_SA_Hard_1": [
+    "Explain that CPython lists are implemented as dynamically resized arrays storing memory pointers to object references.",
+    "Discuss geometric over-allocation: capacity grows non-linearly to provide amortized O(1) append operations.",
+    "Contrast the efficiency of O(1) random index access via pointer arithmetic with O(n) overhead when shifting elements during insertions or deletions."
+  ],
+  "Arrays_Code_Hard_1": [
+    "Handle edge cases: an empty list or rotation count greater than the list length using modulo `k % len(lst)`.",
+    "Rotating to the right by k positions means the last k elements wrap around to the front of the list.",
+    "Slice the list into two segments—the trailing k elements and the preceding elements—and concatenate them in reversed order."
+  ],
+  "Syntax_MCQ_Easy_1": [
+    "Think about how Python indicates where a code block begins and ends without using curly brackets or keywords.",
+    "Python enforces code organization directly through whitespace at the start of lines.",
+    "Identify the concept of indentation levels that define nested execution scopes in Python source code."
+  ],
+  "Syntax_MCQ_Easy_2": [
+    "Recall the punctuation character used to write comments ignored by the Python interpreter.",
+    "This symbol is also commonly known as the hash, pound, or octothorpe symbol.",
+    "Identify the character placed at the beginning of a line or inline to denote non-executable comment text."
+  ],
+  "Syntax_MCQ_Easy_3": [
+    "Review how Python allows strings to span across multiple physical lines.",
+    "Multi-line strings and documentation blocks use repeated quote delimiters at both ends.",
+    "Look for the delimiter pattern that repeats a single or double quote character three times consecutively."
+  ],
+  "Syntax_SA_Easy_1": [
+    "Explain what PEP 8 is and its central role in standardizing Python code conventions.",
+    "Mention key recommendations: 4 spaces per indentation level, naming conventions like snake_case, and avoiding tab-space mixing.",
+    "Discuss how a shared style standard maximizes readability, consistency, and maintainability across developer teams."
+  ],
+  "Syntax_Code_Easy_1": [
+    "Strip any leading or trailing whitespace from both the first and last name arguments.",
+    "Capitalize each name component so the first letter is uppercase and remaining letters are lowercase.",
+    "Combine the formatted first and last names separated by a single space and return the combined string."
+  ],
+  "Syntax_MCQ_Medium_1": [
+    "Review assignment expressions introduced in Python 3.8.",
+    "This operator allows a variable to be assigned a value directly within an enclosing expression.",
+    "Consider how it enables assigning and testing a condition simultaneously in while loops or if statements."
+  ],
+  "Syntax_MCQ_Medium_2": [
+    "Review string prefix modifiers such as 'f', 'b', and 'r' in Python.",
+    "In normal strings, backslashes act as escape sequences for characters like newlines or tabs.",
+    "Consider which string prefix treats backslashes as literal characters without interpreting escape codes."
+  ],
+  "Syntax_MCQ_Medium_3": [
+    "Consider Python 3's strictness regarding indentation consistency within a source file.",
+    "Unlike Python 2, Python 3 disallows combining tab characters and space characters for indentation in the same block.",
+    "Determine which specific indentation error is raised when tabs and spaces are mixed inconsistently."
+  ],
+  "Syntax_SA_Medium_1": [
+    "Explain formatted string literals (f-strings) introduced in Python 3.6.",
+    "Describe how f-strings allow embedding arbitrary Python expressions inside curly braces evaluated directly at runtime.",
+    "Contrast f-strings with older formatting approaches (% operator and str.format) in terms of clarity, execution speed, and inline format specifiers."
+  ],
+  "Syntax_Code_Medium_1": [
+    "Split the input string by its pair delimiter (such as semicolons or commas) into individual token pairs.",
+    "For each token, split once on the key-value separator '=' while stripping extraneous surrounding whitespace.",
+    "Store valid key-value pairs into a dictionary and return the populated dictionary."
+  ],
+  "Syntax_MCQ_Hard_1": [
+    "Examine the optional keyword arguments available in Python's built-in print() function.",
+    "The 'sep' parameter specifies what string appears between multiple printed items.",
+    "The 'end' parameter specifies what string is appended after the final item is printed, defaulting to a newline."
+  ],
+  "Syntax_MCQ_Hard_2": [
+    "Compare Python's true division operator with its floor division operator.",
+    "The single slash always yields a floating-point number, even if operands divide evenly.",
+    "The double slash performs floor division, rounding the mathematical quotient downward to the nearest integer."
+  ],
+  "Syntax_MCQ_Hard_3": [
+    "Review parameter syntax using `/` and `*` in modern Python function definitions.",
+    "Parameters placed before the slash can only be specified positionally by the caller.",
+    "Parameters placed after a bare asterisk must be passed explicitly as named keyword arguments."
+  ],
+  "Syntax_SA_Hard_1": [
+    "Trace the lifecycle of Python code from source text to runtime execution.",
+    "Describe lexical tokenization, parsing into an Abstract Syntax Tree (AST), and compilation into bytecode instructions.",
+    "Explain how the Python Virtual Machine (PVM) interprets bytecode instructions using an internal evaluation stack."
+  ],
+  "Syntax_Code_Hard_1": [
+    "Iterate through candidate string identifiers and test for valid identifier syntax.",
+    "Use str.isidentifier() to check identifier structure and check against Python's keyword list to eliminate reserved words.",
+    "Return a filtered list containing only strings that satisfy identifier naming rules without colliding with reserved keywords."
+  ],
+  "OOP_MCQ_Easy_1": [
+    "Recall the special initialization method called when creating a new instance of a class.",
+    "Special dunder methods in Python begin and end with double underscores.",
+    "Identify the initialization method that sets up initial state and attributes on a new object."
+  ],
+  "OOP_MCQ_Easy_2": [
+    "Review the required first parameter in standard Python class instance methods.",
+    "By convention and language design, this parameter binds the method call to the specific instance being operated on.",
+    "It provides access to that individual object's attributes and methods from within the class definition."
+  ],
+  "OOP_MCQ_Easy_3": [
+    "Recall how a child subclass specifies its parent base class in Python.",
+    "Inheritance relationships are established directly on the class definition header line.",
+    "Look for the syntax placing the parent base class inside parentheses following the new subclass name."
+  ],
+  "OOP_SA_Easy_1": [
+    "Explain the distinction between a class as an abstract blueprint and an object as a concrete instance.",
+    "Describe how a class defines the attributes (data) and methods (behavior) that objects instantiated from it will possess.",
+    "Provide a clear analogy, such as an architectural blueprint versus a constructed building with specific features."
+  ],
+  "OOP_Code_Easy_1": [
+    "Create an `__init__` constructor that accepts width and height arguments and stores them on the instance using `self`.",
+    "Define an area method that calculates the product of width and height.",
+    "Define a perimeter method that calculates twice the sum of width and height, returning the respective values."
+  ],
+  "OOP_MCQ_Medium_1": [
+    "Review how subclasses invoke methods implemented by their parent superclass.",
+    "Python provides a built-in proxy function that delegates method calls up the inheritance chain.",
+    "Identify the built-in function that references the superclass without hardcoding the parent class's name."
+  ],
+  "OOP_MCQ_Medium_2": [
+    "Review special representation methods in Python classes.",
+    "Contrast the developer-focused `__repr__` method with the user-facing string formatting method.",
+    "This method defines the readable string representation displayed when passing an object to print() or str()."
+  ],
+  "OOP_MCQ_Medium_3": [
+    "Consider how Python allows methods to be accessed like attributes without parentheses.",
+    "The property decorator defines a getter method while enabling encapsulation and data validation.",
+    "It allows callers to read a computed value using standard dot-attribute notation instead of explicit method invocation."
+  ],
+  "OOP_SA_Medium_1": [
+    "Explain how inheritance allows a subclass to acquire and extend the attributes and behaviors of a parent class.",
+    "Describe method overriding: how a child class can modify or specialize inherited behavior.",
+    "Explain how `super().__init__()` ensures parent attributes are initialized correctly within cooperative inheritance chains."
+  ],
+  "OOP_Code_Medium_1": [
+    "Define a class with an `__init__` constructor accepting an optional initial balance defaulting to 0.",
+    "Implement deposit to increase balance, and get_balance to return the current balance amount.",
+    "Implement withdraw to check whether available funds cover the requested amount: deduct and return true if sufficient; otherwise return false."
+  ],
+  "OOP_MCQ_Hard_1": [
+    "Review Python's approach to attribute privacy and encapsulation.",
+    "Python does not use private access modifiers enforced by compiler restrictions.",
+    "When an attribute begins with double underscores, Python applies name mangling by prefixing the class name to prevent accidental overrides."
+  ],
+  "OOP_MCQ_Hard_2": [
+    "Recall how Python determines method lookup order in multiple inheritance hierarchies.",
+    "Python uses an algorithm that guarantees monotonicity and preserves local precedence orders.",
+    "Identify the linearization algorithm named with a letter and number that calculates the Method Resolution Order."
+  ],
+  "OOP_MCQ_Hard_3": [
+    "Compare method decorators that modify how methods receive their invocation context.",
+    "A class method receives the class object itself as its first argument, whereas a static method receives no automatic first argument.",
+    "Consider which decorator is used when an operation needs access to class attributes or factory constructors versus a standalone utility."
+  ],
+  "OOP_SA_Hard_1": [
+    "Explain what Method Resolution Order (MRO) is and why it is critical for resolving attribute lookups in complex inheritance diamonds.",
+    "Describe how C3 Linearization constructs a deterministic linear search sequence while respecting monotonicity.",
+    "Discuss how super() relies dynamically on the MRO of the calling object rather than merely calling the syntactic parent."
+  ],
+  "OOP_Code_Hard_1": [
+    "Create a base class Vehicle with constructor setting brand and model, and a method returning vehicle info.",
+    "Create subclass ElectricVehicle inheriting from Vehicle with an additional battery capacity attribute.",
+    "Call super().__init__ in the subclass constructor, and override the info method to incorporate both base vehicle details and battery specifications."
+  ],
+  "Dictionaries_MCQ_Easy_1": [
+    "Recall the literal bracket notation used to initialize an empty dictionary.",
+    "Differentiate between curly brackets, square brackets, parentheses, and the set() constructor.",
+    "Identify the literal symbol pair used to create an empty key-value dictionary mapping."
+  ],
+  "Dictionaries_MCQ_Easy_2": [
+    "Compare dictionary lookup with square bracket indexing against built-in dictionary methods.",
+    "Direct indexing with square brackets throws an error when a requested key does not exist.",
+    "Identify the dictionary method that accepts a key and optional default, returning the default gracefully if the key is missing."
+  ],
+  "Dictionaries_MCQ_Easy_3": [
+    "Review the fundamental requirement for objects used as dictionary keys in Python.",
+    "Keys must be hashable, meaning their hash value remains constant throughout their lifetime.",
+    "Consider which data types are immutable and hashable versus mutable container types that cannot be hashed."
+  ],
+  "Dictionaries_SA_Easy_1": [
+    "Explain that a dictionary is an associative mapping associating unique keys with arbitrary values.",
+    "Describe how dictionaries utilize an underlying hash table to achieve average O(1) key lookups, insertions, and deletions.",
+    "Mention that keys must be immutable and hashable types, while stored values can be any mutable or immutable object."
+  ],
+  "Dictionaries_Code_Easy_1": [
+    "Initialize an empty dictionary to store characters as keys and their counts as values.",
+    "Loop through each character in the string and update its count in the mapping.",
+    "Use dictionary retrieval with a fallback default of zero to increment the count for each character, returning the dictionary."
+  ],
+  "Dictionaries_MCQ_Medium_1": [
+    "Review dictionary comprehension syntax where each iteration defines a key expression and a value expression separated by a colon.",
+    "Identify what expression becomes the key (before the colon) and what expression determines the corresponding value (after the colon).",
+    "Notice that each element 'x' from the tuple directly serves as the dictionary key, while its associated value is computed by multiplying that same 'x' by two."
+  ],
+  "Dictionaries_MCQ_Medium_2": [
+    "Recall the dictionary methods that expose dynamic views of dictionary contents.",
+    "Contrast .keys() and .values() with the method that exposes both keys and values simultaneously as tuple pairs.",
+    "Identify the method commonly used in 'for key, value in dict.items():' loops."
+  ],
+  "Dictionaries_MCQ_Medium_3": [
+    "Understand how setdefault handles both present and absent keys.",
+    "If the key already exists, the dictionary leaves the existing value undisturbed and returns it.",
+    "If the key is missing, setdefault inserts the key with the specified default value and returns that default."
+  ],
+  "Dictionaries_SA_Medium_1": [
+    "Contrast direct bracket indexing with the .get() method when retrieving values from a dictionary.",
+    "Explain that direct bracket access raises a KeyError if the key is not found, making it ideal when key presence is an essential invariant.",
+    "Explain that `.get()` provides safe fallback handling by returning None or a custom default without raising an exception."
+  ],
+  "Dictionaries_Code_Medium_1": [
+    "Combine items from two separate inventory mappings so quantities for shared items aggregate together.",
+    "Start with a copy of the first inventory, then iterate through the second inventory to update existing items or insert new ones.",
+    "When processing each item from the second inventory, retrieve its current quantity in the merged store (defaulting to zero if absent), add the incoming count, and store the updated sum."
+  ],
+  "Dictionaries_MCQ_Hard_1": [
+    "Consider the algorithmic performance of hash table data structures.",
+    "In the absence of excessive hash collisions, computing a key's hash allows direct indexing into memory buckets.",
+    "Identify the standard big-O complexity that represents constant-time operations for lookups, insertions, and deletions."
+  ],
+  "Dictionaries_MCQ_Hard_2": [
+    "Review the evolution of dictionary implementation details from Python 3.6 to Python 3.7.",
+    "Prior to Python 3.7, dictionaries were officially considered unordered mappings.",
+    "Python 3.7 formalized that dictionaries are guaranteed to maintain the exact order in which keys were inserted."
+  ],
+  "Dictionaries_MCQ_Hard_3": [
+    "Review modern operators introduced in Python 3.9 for dictionary manipulation.",
+    "Python 3.9 introduced binary operators for merging two dictionaries into a new mapping.",
+    "Identify the pipe symbol operator borrowed from set operations that combines two dictionaries, giving precedence to right-hand keys."
+  ],
+  "Dictionaries_SA_Hard_1": [
+    "Explain how CPython dictionaries convert keys into array indices using internal hash functions.",
+    "Describe collision resolution strategies such as open addressing with perturbation to search for alternative table slots.",
+    "Discuss modern compact dictionary layout: separating a sparse hash index table from a dense array of entries to optimize memory."
+  ],
+  "Dictionaries_Code_Hard_1": [
+    "Initialize an empty dictionary where original values will serve as keys and lists of original keys will serve as values.",
+    "Iterate through the input dictionary's key-value pairs.",
+    "For each value, append the corresponding key to the grouped list associated with that value in the result mapping, and return the inverted dictionary."
+  ],
+  "File Handling_MCQ_Easy_1": [
+    "Recall the standard built-in function used to open file descriptors on disk in Python.",
+    "It accepts a file path string and access mode flags, returning a file stream object.",
+    "Identify the short built-in function name that opens a file for input or output."
+  ],
+  "File Handling_MCQ_Easy_2": [
+    "Review the file mode flags used with open(): 'r', 'w', 'a', 'b', 't'.",
+    "When the mode parameter is omitted, consider whether Python defaults to reading or writing.",
+    "The default mode opens the file for reading content in standard text mode."
+  ],
+  "File Handling_MCQ_Easy_3": [
+    "Review how context managers handle system resource lifecycles.",
+    "Manual file handling requires explicit close() calls that may be skipped if an unexpected exception occurs.",
+    "The 'with' statement guarantees that the file stream is closed automatically upon exiting the block, even if errors occur."
+  ],
+  "File Handling_SA_Easy_1": [
+    "Explain the standard lifecycle of file handling: opening with proper mode, performing I/O, and ensuring resource closure.",
+    "Contrast the primary access modes: 'r' for reading, 'w' for overwriting/creating, and 'a' for appending.",
+    "Emphasize the advantage of using context managers ('with open') to automatically manage file descriptors and prevent leaks."
+  ],
+  "File Handling_Code_Easy_1": [
+    "First open the file in write mode using a context manager and write the provided text content to disk.",
+    "Next, open the same file in read mode using a context manager to retrieve its contents.",
+    "Read the stored text from the file stream and return the resulting string."
+  ],
+  "File Handling_MCQ_Medium_1": [
+    "Contrast write mode with append mode when opening an existing file.",
+    "Mode 'w' resets the file length to zero upon opening, removing any existing content.",
+    "Mode 'a' positions the file cursor at the end of existing contents, writing new data without erasing previous lines."
+  ],
+  "File Handling_MCQ_Medium_2": [
+    "Compare file reading methods: read(), readline(), and readlines().",
+    "Notice the plural naming of readlines(), indicating it processes all lines in the file stream.",
+    "It returns a list of strings where each element represents a single line including its trailing newline character."
+  ],
+  "File Handling_MCQ_Medium_3": [
+    "Understand how file stream pointers track the current read/write position within an open file.",
+    "Calling seek() adjusts the byte offset of the file pointer.",
+    "Passing an offset of 0 repositions the cursor back to the very beginning of the file."
+  ],
+  "File Handling_SA_Medium_1": [
+    "Compare how read(), readline(), and line iteration handle memory when reading files.",
+    "Explain that read() loads the entire file into memory at once, while readline() reads a single line per call.",
+    "Highlight that direct file iteration ('for line in f:') streams chunks lazily through a buffer, providing optimal memory efficiency for large files."
+  ],
+  "File Handling_Code_Medium_1": [
+    "Open the specified file in write mode and write each log line followed by a newline character.",
+    "Open the file in read mode, iterate through the lines, and check for the presence of target log indicators (such as 'ERROR').",
+    "Count the matching occurrences and return the final count."
+  ],
+  "File Handling_MCQ_Hard_1": [
+    "Consider how operating systems determine default character encodings when opening text files.",
+    "When encoding is omitted, Python falls back to system locale settings, which differ between Windows, macOS, and Linux.",
+    "Specifying UTF-8 explicitly guarantees consistent cross-platform decoding and prevents unexpected UnicodeDecodeError exceptions."
+  ],
+  "File Handling_MCQ_Hard_2": [
+    "Review the special dunder methods that implement Python's context management protocol.",
+    "One method executes when entering the with block to set up the resource, and another executes upon exit.",
+    "Identify the matching dunder method pair that handles setup and teardown for context managers."
+  ],
+  "File Handling_MCQ_Hard_3": [
+    "Consider the system performance cost of invoking direct operating system read/write system calls.",
+    "Frequent unbuffered I/O operations trigger expensive kernel context switches and disk controller interrupts.",
+    "Buffering aggregates multiple small operations into larger in-memory chunks before flushing to disk, significantly boosting throughput."
+  ],
+  "File Handling_SA_Hard_1": [
+    "Explain the responsibilities of `__enter__` and `__exit__` in implementing context management.",
+    "Describe the three exception arguments received by `__exit__`: exception type, exception value, and traceback object.",
+    "Explain how returning True from `__exit__` suppresses an exception, while returning False allows it to propagate upward normally."
+  ],
+  "File Handling_Code_Hard_1": [
+    "Write the raw CSV string data to the specified file path using a text file context manager.",
+    "Read the file back using Python's standard csv module (such as csv.reader or csv.DictReader) to parse rows.",
+    "Compute the required summary metrics (such as row count or column totals) from the parsed rows and return the summary dictionary."
+  ],
+  "Exception Handling_MCQ_Easy_1": [
+    "Recall the compound statement structure used to handle runtime errors in Python.",
+    "Risky code is placed inside the 'try' block, followed by the block that catches specific errors.",
+    "Identify the keyword that defines the error-handling clause for anticipated exception types."
+  ],
+  "Exception Handling_MCQ_Easy_2": [
+    "Review the four clauses of a try-except statement: try, except, else, and finally.",
+    "Consider which block is designed specifically for mandatory cleanup tasks regardless of execution outcome.",
+    "This block executes unconditionally, whether the try block succeeded, caught an error, or raised an unhandled exception."
+  ],
+  "Exception Handling_MCQ_Easy_3": [
+    "Recall how Python programs trigger or throw exceptions intentionally.",
+    "In Python, exceptions are activated using a dedicated statement keyword followed by an exception instance or class.",
+    "Look for the five-letter keyword that raises an exception into the active call stack."
+  ],
+  "Exception Handling_SA_Easy_1": [
+    "Explain how structured exception handling prevents programs from crashing when unexpected runtime events occur.",
+    "Describe the role of 'try' for isolating risky code, 'except' for handling specific failures gracefully, and 'finally' for cleanup.",
+    "Emphasize that 'finally' executes unconditionally, ensuring resources like files or database connections are released."
+  ],
+  "Exception Handling_Code_Easy_1": [
+    "Place the arithmetic division operation inside a try block.",
+    "Add an except clause specifically for ZeroDivisionError and another for TypeError.",
+    "Return the expected error message strings for zero division or type errors, and return the quotient on successful division."
+  ],
+  "Exception Handling_MCQ_Medium_1": [
+    "Analyze the purpose of the optional 'else' block in a try-except structure.",
+    "Contrast the 'else' block with the 'except' block (runs on error) and the 'finally' block (runs always).",
+    "The else block executes only when the code inside the try block runs to completion without raising any exceptions."
+  ],
+  "Exception Handling_MCQ_Medium_2": [
+    "Review how multiple exception types are grouped together in a single except clause.",
+    "When specifying multiple exception classes in one clause, Python requires them to be enclosed in a specific container.",
+    "Look for the syntax that encloses the comma-separated exception classes inside parentheses as a tuple."
+  ],
+  "Exception Handling_MCQ_Medium_3": [
+    "Consider Python's built-in exception inheritance hierarchy.",
+    "BaseException is reserved for system-level signals like KeyboardInterrupt and SystemExit that should rarely be caught.",
+    "Standard user-defined exceptions and library errors should inherit from the standard built-in Exception class."
+  ],
+  "Exception Handling_SA_Medium_1": [
+    "Contrast the execution conditions of 'else' (runs only on zero errors) with 'finally' (runs unconditionally).",
+    "Explain that catching specific exceptions prevents masking unrelated programming bugs like NameError or typos.",
+    "Emphasize that broad exception catching inadvertently intercepts critical system signals like KeyboardInterrupt."
+  ],
+  "Exception Handling_Code_Medium_1": [
+    "Initialize a list for successfully converted integers and an error counter initialized to zero.",
+    "Iterate through the string items and attempt integer conversion inside a try block.",
+    "Catch ValueError when conversion fails to increment the error counter without crashing, and return a dictionary with the results."
+  ],
+  "Exception Handling_MCQ_Hard_1": [
+    "Consider what types of exceptions are caught when using a bare except clause without specifying an exception class.",
+    "A bare except intercepts all subclasses of BaseException, including system exit requests.",
+    "This intercepts KeyboardInterrupt (Ctrl+C) and SystemExit, preventing users and operating systems from stopping the program cleanly."
+  ],
+  "Exception Handling_MCQ_Hard_2": [
+    "Review exception chaining syntax introduced in Python 3.",
+    "The 'from' clause links a new high-level exception to an underlying root-cause exception.",
+    "It explicitly sets the `__cause__` attribute, preserving the original error context in the resulting traceback."
+  ],
+  "Exception Handling_MCQ_Hard_3": [
+    "Trace execution flow when a function reaches a return statement inside a try block followed by a finally block.",
+    "The finally block is guaranteed to execute before the function actually exits, even if a return has been encountered.",
+    "If the finally block executes its own return statement, it overrides and discards any return value queued by the try block."
+  ],
+  "Exception Handling_SA_Hard_1": [
+    "Outline the hierarchy rooted at BaseException, noting that Exception inherits from it while SystemExit and KeyboardInterrupt do not.",
+    "Contrast implicit exception chaining (via `__context__`) with explicit chaining (via `raise ... from ...` setting `__cause__`).",
+    "Explain how preserving the causal chain assists debugging while catching BaseException breaks standard runtime signaling."
+  ],
+  "Exception Handling_Code_Hard_1": [
+    "Use a loop running up to max_retries attempts.",
+    "Inside the loop, call func() within a try-except block; if it succeeds, return the resulting value immediately.",
+    "If an exception occurs on each attempt and all retries are exhausted, return the fallback value or raise the error."
+  ]
+}

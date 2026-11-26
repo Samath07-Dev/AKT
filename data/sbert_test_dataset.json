@@ -1,0 +1,522 @@
+[
+  {
+    "concept": "Variables",
+    "difficulty": "easy",
+    "student_text": "A variable acts as a memory reference binding a human-readable name to stored program data.",
+    "reference_answer": "A variable is a named container in computer memory used to store data values that can be referenced and modified throughout a program.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Variables",
+    "difficulty": "easy",
+    "student_text": "Variables allow programmers to label and store information inside system memory for later use.",
+    "reference_answer": "A variable is a named container in computer memory used to store data values that can be referenced and modified throughout a program.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Variables",
+    "difficulty": "easy",
+    "student_text": "A variable is something you define at the start of a program to hold items.",
+    "reference_answer": "A variable is a named container in computer memory used to store data values that can be referenced and modified throughout a program.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Variables",
+    "difficulty": "easy",
+    "student_text": "A variable is a hardware register in the CPU that cannot be modified once set.",
+    "reference_answer": "A variable is a named container in computer memory used to store data values that can be referenced and modified throughout a program.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Variables",
+    "difficulty": "easy",
+    "student_text": "Variable assignment using = compares two expressions and returns True or False.",
+    "reference_answer": "A variable is a named container in computer memory used to store data values that can be referenced and modified throughout a program.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Variables",
+    "difficulty": "medium",
+    "student_text": "Python resolves types dynamically during runtime; reassigning a variable updates its memory pointer to a new object.",
+    "reference_answer": "Python is dynamically typed, meaning variable types are determined at runtime rather than compile time. When a variable is reassigned to a different type, Python creates a new object in memory and updates the variable's reference pointer to point to the new object, leaving the old object for garbage collection if unreferenced.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Variables",
+    "difficulty": "medium",
+    "student_text": "Dynamic typing lets you change variables whenever you want.",
+    "reference_answer": "Python is dynamically typed, meaning variable types are determined at runtime rather than compile time. When a variable is reassigned to a different type, Python creates a new object in memory and updates the variable's reference pointer to point to the new object, leaving the old object for garbage collection if unreferenced.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Variables",
+    "difficulty": "medium",
+    "student_text": "Python uses static typing where each variable declaration binds a permanent type to that memory address.",
+    "reference_answer": "Python is dynamically typed, meaning variable types are determined at runtime rather than compile time. When a variable is reassigned to a different type, Python creates a new object in memory and updates the variable's reference pointer to point to the new object, leaving the old object for garbage collection if unreferenced.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Variables",
+    "difficulty": "hard",
+    "student_text": "Variable lookup in Python searches the Local scope first, then Enclosing functions, Global module, and Built-ins.",
+    "reference_answer": "The LEGB rule determines variable lookup priority: Local, Enclosing, Global, and Built-in scopes. Python searches each scope in this sequence. The 'global' keyword forces variable binding directly to the module-level global scope, while 'nonlocal' binds to the nearest enclosing non-global function scope.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Variables",
+    "difficulty": "hard",
+    "student_text": "LEGB is the rule Python uses to find variables.",
+    "reference_answer": "The LEGB rule determines variable lookup priority: Local, Enclosing, Global, and Built-in scopes. Python searches each scope in this sequence. The 'global' keyword forces variable binding directly to the module-level global scope, while 'nonlocal' binds to the nearest enclosing non-global function scope.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Variables",
+    "difficulty": "hard",
+    "student_text": "Python scope resolution begins at the Built-in scope and cascades down to Local as the last resort.",
+    "reference_answer": "The LEGB rule determines variable lookup priority: Local, Enclosing, Global, and Built-in scopes. Python searches each scope in this sequence. The 'global' keyword forces variable binding directly to the module-level global scope, while 'nonlocal' binds to the nearest enclosing non-global function scope.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Conditionals",
+    "difficulty": "easy",
+    "student_text": "If-elif-else statements evaluate conditions in order and execute the block of the first True condition.",
+    "reference_answer": "An if-elif-else statement evaluates boolean expressions sequentially and executes the block of code corresponding to the first true condition, skipping remaining checks.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Conditionals",
+    "difficulty": "easy",
+    "student_text": "If statements help the program make decisions based on checks.",
+    "reference_answer": "An if-elif-else statement evaluates boolean expressions sequentially and executes the block of code corresponding to the first true condition, skipping remaining checks.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Conditionals",
+    "difficulty": "easy",
+    "student_text": "In an if-elif ladder, every branch with a true expression will execute simultaneously.",
+    "reference_answer": "An if-elif-else statement evaluates boolean expressions sequentially and executes the block of code corresponding to the first true condition, skipping remaining checks.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Conditionals",
+    "difficulty": "medium",
+    "student_text": "Short-circuit evaluation avoids evaluating the second operand if the first operand suffices to determine the boolean result.",
+    "reference_answer": "Short-circuit evaluation stops evaluating logical expressions as soon as the outcome is determined. 'and' returns the first falsy operand or the last truthy operand; 'or' returns the first truthy operand or the last falsy operand without evaluating subsequent expressions.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Conditionals",
+    "difficulty": "medium",
+    "student_text": "Python skips the rest of the condition when it already knows the answer.",
+    "reference_answer": "Short-circuit evaluation stops evaluating logical expressions as soon as the outcome is determined. 'and' returns the first falsy operand or the last truthy operand; 'or' returns the first truthy operand or the last falsy operand without evaluating subsequent expressions.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Conditionals",
+    "difficulty": "medium",
+    "student_text": "Short-circuit evaluation throws an exception whenever a condition contains an error on either side.",
+    "reference_answer": "Short-circuit evaluation stops evaluating logical expressions as soon as the outcome is determined. 'and' returns the first falsy operand or the last truthy operand; 'or' returns the first truthy operand or the last falsy operand without evaluating subsequent expressions.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Conditionals",
+    "difficulty": "hard",
+    "student_text": "In Python, objects evaluate as truthy or falsy: zero, empty collections, and None are treated as False in conditions.",
+    "reference_answer": "While if-elif-else evaluates arbitrary boolean expressions sequentially, structural pattern matching (match-case) matches subject data against structural templates (shapes, types, sequence unpacking, and class attributes). Pattern matching excels in destructuring complex nested data structures and AST node handling.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Conditionals",
+    "difficulty": "hard",
+    "student_text": "Empty lists and zero count as False in if statements.",
+    "reference_answer": "While if-elif-else evaluates arbitrary boolean expressions sequentially, structural pattern matching (match-case) matches subject data against structural templates (shapes, types, sequence unpacking, and class attributes). Pattern matching excels in destructuring complex nested data structures and AST node handling.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Conditionals",
+    "difficulty": "hard",
+    "student_text": "In Python, empty lists and dictionaries evaluate to True because they exist in memory.",
+    "reference_answer": "While if-elif-else evaluates arbitrary boolean expressions sequentially, structural pattern matching (match-case) matches subject data against structural templates (shapes, types, sequence unpacking, and class attributes). Pattern matching excels in destructuring complex nested data structures and AST node handling.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Loops",
+    "difficulty": "easy",
+    "student_text": "Use a for loop to iterate through known elements or a sequence, and a while loop when repetition depends on an ongoing condition.",
+    "reference_answer": "A for loop iterates over a pre-determined sequence or range, whereas a while loop continues executing repeatedly as long as a boolean condition remains true.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Loops",
+    "difficulty": "easy",
+    "student_text": "A for loop is for lists and a while loop is for conditions.",
+    "reference_answer": "A for loop iterates over a pre-determined sequence or range, whereas a while loop continues executing repeatedly as long as a boolean condition remains true.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Loops",
+    "difficulty": "easy",
+    "student_text": "A for loop continues indefinitely until a crash occurs, whereas while loops only run once.",
+    "reference_answer": "A for loop iterates over a pre-determined sequence or range, whereas a while loop continues executing repeatedly as long as a boolean condition remains true.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Loops",
+    "difficulty": "medium",
+    "student_text": "Break terminates the enclosing loop entirely, while continue only skips the remaining statements of the active cycle.",
+    "reference_answer": "In Python, the loop 'else' block executes only when the loop terminates naturally after finishing all iterations or failing its condition, but NOT if the loop is exited prematurely via a break statement. It is commonly used in search algorithms to handle cases where no matching item was found.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Loops",
+    "difficulty": "medium",
+    "student_text": "Break exits and continue skips to the next step.",
+    "reference_answer": "In Python, the loop 'else' block executes only when the loop terminates naturally after finishing all iterations or failing its condition, but NOT if the loop is exited prematurely via a break statement. It is commonly used in search algorithms to handle cases where no matching item was found.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Loops",
+    "difficulty": "medium",
+    "student_text": "The continue statement terminates the entire program, whereas break pauses execution for one second.",
+    "reference_answer": "In Python, the loop 'else' block executes only when the loop terminates naturally after finishing all iterations or failing its condition, but NOT if the loop is exited prematurely via a break statement. It is commonly used in search algorithms to handle cases where no matching item was found.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Loops",
+    "difficulty": "hard",
+    "student_text": "In Python loops, the else block runs upon natural completion of the loop, but is skipped if terminated by a break.",
+    "reference_answer": "Python's iterator protocol requires an iterable to implement __iter__(), returning an iterator, and the iterator to implement __next__(), returning successive items or raising StopIteration when exhausted. Under the hood, a 'for' loop calls iter() on the collection and repeatedly calls next() inside a try-except block that cleanly catches StopIteration to terminate.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Loops",
+    "difficulty": "hard",
+    "student_text": "The else in a for loop runs at the end.",
+    "reference_answer": "Python's iterator protocol requires an iterable to implement __iter__(), returning an iterator, and the iterator to implement __next__(), returning successive items or raising StopIteration when exhausted. Under the hood, a 'for' loop calls iter() on the collection and repeatedly calls next() inside a try-except block that cleanly catches StopIteration to terminate.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Loops",
+    "difficulty": "hard",
+    "student_text": "The loop else block is triggered exclusively when an uncaught exception is raised inside the loop.",
+    "reference_answer": "Python's iterator protocol requires an iterable to implement __iter__(), returning an iterator, and the iterator to implement __next__(), returning successive items or raising StopIteration when exhausted. Under the hood, a 'for' loop calls iter() on the collection and repeatedly calls next() inside a try-except block that cleanly catches StopIteration to terminate.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Functions",
+    "difficulty": "easy",
+    "student_text": "Functions package reusable code blocks to promote modularity, accepting parameters and returning results.",
+    "reference_answer": "Functions break programs into modular reusable blocks of code. Parameters are variable placeholders in the function definition, while arguments are the actual values passed into the function when called.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Functions",
+    "difficulty": "easy",
+    "student_text": "Functions let you run the same code multiple times.",
+    "reference_answer": "Functions break programs into modular reusable blocks of code. Parameters are variable placeholders in the function definition, while arguments are the actual values passed into the function when called.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Functions",
+    "difficulty": "easy",
+    "student_text": "A function must always contain a print statement; return statements are invalid in Python functions.",
+    "reference_answer": "Functions break programs into modular reusable blocks of code. Parameters are variable placeholders in the function definition, while arguments are the actual values passed into the function when called.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Functions",
+    "difficulty": "medium",
+    "student_text": "Parameters define the input variables expected by a function; arguments are the concrete data values supplied upon invocation.",
+    "reference_answer": "*args allows a function to accept any number of positional arguments, packing them into an immutable tuple. **kwargs allows accepting arbitrary keyword arguments, packing them into a dictionary of key-value pairs.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Functions",
+    "difficulty": "medium",
+    "student_text": "One is in the definition and one is in the call.",
+    "reference_answer": "*args allows a function to accept any number of positional arguments, packing them into an immutable tuple. **kwargs allows accepting arbitrary keyword arguments, packing them into a dictionary of key-value pairs.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Functions",
+    "difficulty": "medium",
+    "student_text": "Parameters are the return values sent to the caller, while arguments are the local variables.",
+    "reference_answer": "*args allows a function to accept any number of positional arguments, packing them into an immutable tuple. **kwargs allows accepting arbitrary keyword arguments, packing them into a dictionary of key-value pairs.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Functions",
+    "difficulty": "hard",
+    "student_text": "A closure occurs when an inner function remembers and accesses bindings from its enclosing function after the outer has returned.",
+    "reference_answer": "A closure is a function object that retains access to variables in its enclosing lexical scope even after that scope has finished execution. Default parameter values are evaluated once when the function is defined; using mutable objects (like lists or dicts) retains mutations across subsequent calls, leading to shared state bugs. The standard fix is using None as default.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Functions",
+    "difficulty": "hard",
+    "student_text": "Closures have access to outer function variables.",
+    "reference_answer": "A closure is a function object that retains access to variables in its enclosing lexical scope even after that scope has finished execution. Default parameter values are evaluated once when the function is defined; using mutable objects (like lists or dicts) retains mutations across subsequent calls, leading to shared state bugs. The standard fix is using None as default.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Functions",
+    "difficulty": "hard",
+    "student_text": "Closures are functions that prevent recursion and force single-threaded execution.",
+    "reference_answer": "A closure is a function object that retains access to variables in its enclosing lexical scope even after that scope has finished execution. Default parameter values are evaluated once when the function is defined; using mutable objects (like lists or dicts) retains mutations across subsequent calls, leading to shared state bugs. The standard fix is using None as default.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Arrays",
+    "difficulty": "easy",
+    "student_text": "Lists in Python are dynamic, mutable, ordered collections capable of containing items of various data types.",
+    "reference_answer": "A Python list is an ordered mutable sequence of elements accessed by 0-based integer indexing, where index 0 represents the first element and negative indices count backwards from the end.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Arrays",
+    "difficulty": "easy",
+    "student_text": "Lists hold multiple values in Python.",
+    "reference_answer": "A Python list is an ordered mutable sequence of elements accessed by 0-based integer indexing, where index 0 represents the first element and negative indices count backwards from the end.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Arrays",
+    "difficulty": "easy",
+    "student_text": "Python lists are strictly homogeneous and cannot change size or elements once created.",
+    "reference_answer": "A Python list is an ordered mutable sequence of elements accessed by 0-based integer indexing, where index 0 represents the first element and negative indices count backwards from the end.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Arrays",
+    "difficulty": "medium",
+    "student_text": "The fundamental difference is mutability: lists can be modified in-place, while tuples cannot be altered after creation.",
+    "reference_answer": "Python list slicing [start:stop:step] extracts elements starting at index 'start' up to but not including 'stop', incrementing by 'step'. A negative step iterates backwards, such that lst[::-1] reverses the list.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Arrays",
+    "difficulty": "medium",
+    "student_text": "Tuples cannot change but lists can change.",
+    "reference_answer": "Python list slicing [start:stop:step] extracts elements starting at index 'start' up to but not including 'stop', incrementing by 'step'. A negative step iterates backwards, such that lst[::-1] reverses the list.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Arrays",
+    "difficulty": "medium",
+    "student_text": "Tuples can have items added or removed with pop() and append(), whereas lists are locked.",
+    "reference_answer": "Python list slicing [start:stop:step] extracts elements starting at index 'start' up to but not including 'stop', incrementing by 'step'. A negative step iterates backwards, such that lst[::-1] reverses the list.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Arrays",
+    "difficulty": "hard",
+    "student_text": "Shallow copy clones the top-level collection while referencing child objects; deep copy recursively copies all nested elements.",
+    "reference_answer": "Python lists are variable-length arrays storing contiguous 64-bit pointers to PyObject items in heap memory. Because pointers are contiguous, indexing is O(1). Appending is amortized O(1) due to over-allocation growth patterns, whereas inserting at index 0 is O(N) because all subsequent element pointers must be shifted right in memory.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Arrays",
+    "difficulty": "hard",
+    "student_text": "Deep copy makes a real copy of inner objects.",
+    "reference_answer": "Python lists are variable-length arrays storing contiguous 64-bit pointers to PyObject items in heap memory. Because pointers are contiguous, indexing is O(1). Appending is amortized O(1) due to over-allocation growth patterns, whereas inserting at index 0 is O(N) because all subsequent element pointers must be shifted right in memory.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Arrays",
+    "difficulty": "hard",
+    "student_text": "Shallow copy modifies the original list, whereas deep copy deletes the original object from memory.",
+    "reference_answer": "Python lists are variable-length arrays storing contiguous 64-bit pointers to PyObject items in heap memory. Because pointers are contiguous, indexing is O(1). Appending is amortized O(1) due to over-allocation growth patterns, whereas inserting at index 0 is O(N) because all subsequent element pointers must be shifted right in memory.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "OOP",
+    "difficulty": "easy",
+    "student_text": "A class acts as a design blueprint defining attributes and methods; an object is an individual instance instantiated from that class.",
+    "reference_answer": "Object-oriented programming structures code into classes, which serve as blueprints, and objects, which are concrete instances containing attributes (data) and methods (behavior).",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "OOP",
+    "difficulty": "easy",
+    "student_text": "Classes define the structure and objects are the actual items.",
+    "reference_answer": "Object-oriented programming structures code into classes, which serve as blueprints, and objects, which are concrete instances containing attributes (data) and methods (behavior).",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "OOP",
+    "difficulty": "easy",
+    "student_text": "Objects are abstract blueprints used at compile-time, while classes represent running memory instances.",
+    "reference_answer": "Object-oriented programming structures code into classes, which serve as blueprints, and objects, which are concrete instances containing attributes (data) and methods (behavior).",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "OOP",
+    "difficulty": "medium",
+    "student_text": "In Python methods, self explicitly references the current instance, allowing access to instance attributes and methods.",
+    "reference_answer": "Inheritance allows a subclass to inherit attributes and methods from a parent class, facilitating code reuse and polymorphism. The super() function provides a reference to the parent class, enabling the subclass to invoke parent constructors or methods without explicitly naming the parent class.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "OOP",
+    "difficulty": "medium",
+    "student_text": "Self is the first parameter in methods.",
+    "reference_answer": "Inheritance allows a subclass to inherit attributes and methods from a parent class, facilitating code reuse and polymorphism. The super() function provides a reference to the parent class, enabling the subclass to invoke parent constructors or methods without explicitly naming the parent class.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "OOP",
+    "difficulty": "medium",
+    "student_text": "Self refers to the global module scope rather than the instance invoking the method.",
+    "reference_answer": "Inheritance allows a subclass to inherit attributes and methods from a parent class, facilitating code reuse and polymorphism. The super() function provides a reference to the parent class, enabling the subclass to invoke parent constructors or methods without explicitly naming the parent class.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "OOP",
+    "difficulty": "hard",
+    "student_text": "Polymorphism enables objects of different types to respond to the same method invocation in their own specific manner.",
+    "reference_answer": "Python uses the C3 Linearization algorithm to compute a deterministic Method Resolution Order (MRO) that preserves local precedence ordering and monotonicity in multiple inheritance hierarchies. __new__ is the static allocator method called first to create and return the instance object, whereas __init__ is the initializer method called subsequently to configure the newly created instance.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "OOP",
+    "difficulty": "hard",
+    "student_text": "Different classes can have the same method name.",
+    "reference_answer": "Python uses the C3 Linearization algorithm to compute a deterministic Method Resolution Order (MRO) that preserves local precedence ordering and monotonicity in multiple inheritance hierarchies. __new__ is the static allocator method called first to create and return the instance object, whereas __init__ is the initializer method called subsequently to configure the newly created instance.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "OOP",
+    "difficulty": "hard",
+    "student_text": "Polymorphism means an object can only belong to one single data type throughout its lifecycle.",
+    "reference_answer": "Python uses the C3 Linearization algorithm to compute a deterministic Method Resolution Order (MRO) that preserves local precedence ordering and monotonicity in multiple inheritance hierarchies. __new__ is the static allocator method called first to create and return the instance object, whereas __init__ is the initializer method called subsequently to configure the newly created instance.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Exception Handling",
+    "difficulty": "easy",
+    "student_text": "Try-except blocks intercept runtime exceptions, allowing programs to recover or log errors rather than crashing abruptly.",
+    "reference_answer": "The try block encloses code that may raise an error. The except block catches and handles specific exceptions gracefully without crashing the program. The finally block always runs regardless of whether an exception occurred, typically used for cleanup operations.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Exception Handling",
+    "difficulty": "easy",
+    "student_text": "You put risky code in try and handle errors in except.",
+    "reference_answer": "The try block encloses code that may raise an error. The except block catches and handles specific exceptions gracefully without crashing the program. The finally block always runs regardless of whether an exception occurred, typically used for cleanup operations.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Exception Handling",
+    "difficulty": "easy",
+    "student_text": "The try block is only executed when an error has already crashed the operating system.",
+    "reference_answer": "The try block encloses code that may raise an error. The except block catches and handles specific exceptions gracefully without crashing the program. The finally block always runs regardless of whether an exception occurred, typically used for cleanup operations.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Exception Handling",
+    "difficulty": "medium",
+    "student_text": "Code in a finally block is guaranteed to execute whether an exception was raised or the try block finished cleanly.",
+    "reference_answer": "The else block executes only if the try block completes successfully without any exceptions, separating normal logic from error handling. The finally block runs unconditionally in all scenarios. Catching specific exceptions prevents masking unrelated bugs or intercepting system signals like KeyboardInterrupt.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Exception Handling",
+    "difficulty": "medium",
+    "student_text": "The finally block is used for closing things.",
+    "reference_answer": "The else block executes only if the try block completes successfully without any exceptions, separating normal logic from error handling. The finally block runs unconditionally in all scenarios. Catching specific exceptions prevents masking unrelated bugs or intercepting system signals like KeyboardInterrupt.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Exception Handling",
+    "difficulty": "medium",
+    "student_text": "The finally block is skipped whenever a try block finishes without encountering an error.",
+    "reference_answer": "The else block executes only if the try block completes successfully without any exceptions, separating normal logic from error handling. The finally block runs unconditionally in all scenarios. Catching specific exceptions prevents masking unrelated bugs or intercepting system signals like KeyboardInterrupt.",
+    "label": 0.1,
+    "category": "hard_negative"
+  },
+  {
+    "concept": "Exception Handling",
+    "difficulty": "hard",
+    "student_text": "Raise explicitly instantiates and triggers an exception, halting normal execution and propagating the error up the stack.",
+    "reference_answer": "All built-in exceptions inherit from BaseException, while standard application exceptions inherit from Exception. Chaining with \"raise NewException from err\" explicitly preserves the original causal context on the __cause__ attribute. Catching BaseException or using bare except captures SystemExit and KeyboardInterrupt, preventing graceful program shutdown.",
+    "label": 0.92,
+    "category": "positive"
+  },
+  {
+    "concept": "Exception Handling",
+    "difficulty": "hard",
+    "student_text": "Raise is used to throw an exception in Python.",
+    "reference_answer": "All built-in exceptions inherit from BaseException, while standard application exceptions inherit from Exception. Chaining with \"raise NewException from err\" explicitly preserves the original causal context on the __cause__ attribute. Catching BaseException or using bare except captures SystemExit and KeyboardInterrupt, preventing graceful program shutdown.",
+    "label": 0.5,
+    "category": "partial"
+  },
+  {
+    "concept": "Exception Handling",
+    "difficulty": "hard",
+    "student_text": "The raise keyword automatically repairs corrupted memory and resumes execution.",
+    "reference_answer": "All built-in exceptions inherit from BaseException, while standard application exceptions inherit from Exception. Chaining with \"raise NewException from err\" explicitly preserves the original causal context on the __cause__ attribute. Catching BaseException or using bare except captures SystemExit and KeyboardInterrupt, preventing graceful program shutdown.",
+    "label": 0.1,
+    "category": "hard_negative"
+  }
+]

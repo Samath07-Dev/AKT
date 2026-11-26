@@ -1,0 +1,73 @@
+# ==============================================================================
+# Environment & Secret Files (Never commit real credentials)
+# ==============================================================================
+.env
+.env.*
+!.env.example
+frontend/.env
+frontend/.env.*
+frontend/.env.local
+frontend/.env*.local
+!frontend/.env.example
+cookies.txt
+*.pem
+*.key
+
+# ==============================================================================
+# Python & Virtual Environments
+# ==============================================================================
+.venv/
+.venv-isolated/
+.*venv*/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# ==============================================================================
+# Node.js & Next.js Build Artifacts
+# ==============================================================================
+node_modules/
+frontend/node_modules/
+.next/
+frontend/.next/
+out/
+frontend/out/
+*.tsbuildinfo
+frontend/test-results/
+frontend/playwright-report/
+coverage/
+
+# ==============================================================================
+# Database & Local Storage
+# ==============================================================================
+mongodb-data/
+*.archive.gz
+
+# ==============================================================================
+# Legacy Prototype & Temporary Scratch Scripts
+# ==============================================================================
+legacy/
+scratch/
+
+# ==============================================================================
+# Raw Research Datasets (> 100MB) & Data Extracts
+# ==============================================================================
+data/raw/
+*.csv
+
+# ==============================================================================
+# Operating System & Temporary Files
+# ==============================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+*.log
+*.log.*
+tmp/
+temp/
