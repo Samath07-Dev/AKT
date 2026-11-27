@@ -238,7 +238,8 @@ def get_motor_client() -> AsyncIOMotorClient:
 
     if _motor_client is None or _motor_loop is None or (_motor_loop is not None and (_motor_loop.is_closed() or _motor_loop != current_loop)):
         _motor_loop = current_loop
-        _motor_client = AsyncIOMotorClient(MONGO_URI, serverSelectionTimeoutMS=2000)
+        timeout_ms = int(os.getenv("MONGO_TIMEOUT_MS", "1500"))
+        _motor_client = AsyncIOMotorClient(MONGO_URI, serverSelectionTimeoutMS=timeout_ms)
     return _motor_client
 
 def get_motor_db():
@@ -323,20 +324,18 @@ def is_valid_mcq_observation(score: Any) -> bool:
 
 async def get_student_tracker(student_id: str, reload_from_db: bool = False) -> KnowledgeStateTracker:
     """
-    Retrieves or creates a KnowledgeStateTracker for an individual student, restoring state from MongoDB if available.
-    Fails explicitly on database read errors rather than silently resetting to default priors.
+    Retrieves or creates a KnowledgeStateTracker for an individual student, restoring state from MongoDB if available,
+    or falling back to in-memory state tracking when MongoDB is unreachable.
     """
     if reload_from_db or student_id not in _student_trackers:
         stu_tracker = KnowledgeStateTracker()
+        state_doc = None
         db = get_motor_db()
         try:
             state_doc = await db["student_states"].find_one({"student_id": student_id})
         except Exception as exc:
-            logger.error("Database read failure for student_states %s: %s", student_id, exc)
-            raise HTTPException(
-                status_code=500,
-                detail=f"Database read failure loading state for student {student_id}; refusing to reset to default prior."
-            ) from exc
+            logger.warning("MongoDB unavailable loading state for student %s: %s; falling back to in-memory state", student_id, exc)
+            state_doc = _in_memory_student_states.get(student_id)
 
         if state_doc and "knowledge_state" in state_doc:
             for c_name, c_data in state_doc["knowledge_state"].items():
@@ -460,11 +459,8 @@ async def persist_student_mastery_state(
     except HTTPException:
         raise
     except Exception as exc:
-        logger.error("Failed to persist student mastery state for %s: %s", student_id, exc)
-        raise HTTPException(
-            status_code=500,
-            detail=f"Database persistence failure for student mastery state: {exc}"
-        ) from exc
+        logger.warning("MongoDB unavailable persisting student mastery state for %s: %s; preserved in-memory", student_id, exc)
+        new_version = (expected_version or 0) + 1
 
     _in_memory_student_states[student_id] = {**update_payload, "version": new_version}
     return new_version
@@ -546,11 +542,12 @@ async def record_student_score_internal_async(
             sub_id = f"sub_legacy_{uuid.uuid4().hex}"
 
         # 2. Check for duplicate or existing submission_id
+        existing_score = None
         try:
             existing_score = await db["scores"].find_one({"submission_id": sub_id})
         except Exception as exc:
-            logger.error("Database query failed checking submission_id %s: %s", sub_id, exc)
-            raise HTTPException(status_code=500, detail="Database failure querying score ledger.") from exc
+            logger.warning("MongoDB unavailable checking submission_id %s: %s; checking in-memory", sub_id, exc)
+            existing_score = next((s for s in _in_memory_scores.get(student_id, []) if s.get("submission_id") == sub_id), None)
 
         if existing_score:
             if existing_score.get("bkt_processed") is True:
@@ -649,8 +646,8 @@ async def record_student_score_internal_async(
                     }
                 score_entry = raced_score or score_entry
             except Exception as exc:
-                logger.error("Failed to insert score into ledger for %s: %s", sub_id, exc)
-                raise HTTPException(status_code=500, detail="Database failure writing to score ledger.") from exc
+                logger.warning("MongoDB unavailable writing score ledger for %s: %s; cached in-memory", sub_id, exc)
+                inserted_fresh = True
 
             if inserted_fresh:
                 if student_id not in _in_memory_scores:
@@ -658,6 +655,7 @@ async def record_student_score_internal_async(
                 _in_memory_scores[student_id].insert(0, score_entry)
 
         # 3. Reconcile pending submissions for this student in deterministic chronological order
+        pending_scores = []
         try:
             pending_cursor = db["scores"].find({
                 "student_id": student_id,
@@ -666,13 +664,17 @@ async def record_student_score_internal_async(
             }).sort("timestamp", 1)
             pending_scores = await pending_cursor.to_list(length=100)
         except Exception as exc:
-            logger.error("Failed to query pending scores for %s: %s", student_id, exc)
-            raise HTTPException(status_code=500, detail="Database failure reading pending scores.") from exc
+            logger.warning("MongoDB unavailable reading pending scores for %s: %s; using in-memory pending scores", student_id, exc)
+            pending_scores = [s for s in _in_memory_scores.get(student_id, []) if not s.get("bkt_processed")]
 
         # 4. Load fresh tracker state from database and stage updates in a copy
         persisted_tracker = await get_student_tracker(student_id, reload_from_db=True)
         staged_tracker = copy.deepcopy(persisted_tracker)
-        state_doc = await db["student_states"].find_one({"student_id": student_id})
+        state_doc = None
+        try:
+            state_doc = await db["student_states"].find_one({"student_id": student_id})
+        except Exception:
+            state_doc = _in_memory_student_states.get(student_id)
         raw_state_ver = state_doc.get("version") if state_doc else None
         current_version = (
             raw_state_ver
@@ -757,14 +759,19 @@ async def record_student_score_internal_async(
                 _student_trackers[student_id] = copy.deepcopy(staged_tracker)
 
             # Mark score record as bkt_processed: True in MongoDB ledger
-            await db["scores"].update_one(
-                {"_id": pending["_id"]},
-                {"$set": {
-                    "bkt_processed": True,
-                    "bkt_processed_at": datetime.now(timezone.utc).isoformat(),
-                    "bkt_observations_applied": applied_count
-                }}
-            )
+            if isinstance(pending, dict) and "_id" in pending:
+                try:
+                    await db["scores"].update_one(
+                        {"_id": pending["_id"]},
+                        {"$set": {
+                            "bkt_processed": True,
+                            "bkt_processed_at": datetime.now(timezone.utc).isoformat(),
+                            "bkt_observations_applied": applied_count
+                        }}
+                    )
+                except Exception:
+                    pass
+            pending["bkt_processed"] = True
 
         _student_trackers[student_id] = staged_tracker
         concept_res = staged_tracker.state.get(concept, {})
