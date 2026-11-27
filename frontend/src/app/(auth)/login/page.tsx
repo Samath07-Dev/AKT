@@ -67,17 +67,17 @@ export default function LoginPage() {
   };
 
   return (
-    <Card className="border-slate-800 bg-[#151F32]/90 shadow-2xl backdrop-blur-xl">
+    <Card className="border-slate-200 bg-white shadow-sm">
       <CardHeader className="space-y-1 pb-4">
         <div className="flex items-center justify-between">
           <Badge variant="info" size="sm" dot>
             Student Portal
           </Badge>
         </div>
-        <CardTitle className="text-xl font-bold text-slate-100 mt-2">
+        <CardTitle className="text-xl font-bold text-slate-900 mt-2">
           Sign In to Your Session
         </CardTitle>
-        <CardDescription className="text-xs text-slate-400">
+        <CardDescription className="text-xs text-slate-600">
           Sign in to access your learning dashboard.
         </CardDescription>
       </CardHeader>
@@ -87,9 +87,9 @@ export default function LoginPage() {
         {error && (
           <div
             role="alert"
-            className="rounded-xl border border-rose-500/30 bg-rose-950/20 p-3 text-xs text-rose-300 flex items-center gap-2"
+            className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700 flex items-center gap-2"
           >
-            <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+            <AlertCircle className="h-4 w-4 shrink-0 text-rose-600" />
             <span>{error}</span>
           </div>
         )}
@@ -99,12 +99,12 @@ export default function LoginPage() {
           <div className="space-y-1.5">
             <label
               htmlFor="username-input"
-              className="text-xs font-semibold text-slate-300 flex items-center justify-between"
+              className="text-xs font-semibold text-slate-700 flex items-center justify-between"
             >
               <span>Username</span>
             </label>
             <div className="relative">
-              <User className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+              <User className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
               <input
                 id="username-input"
                 type="text"
@@ -112,7 +112,7 @@ export default function LoginPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="e.g. student_s001"
-                className="w-full rounded-xl border border-slate-800 bg-slate-900/70 pl-9 pr-3.5 py-2 text-xs sm:text-sm text-slate-100 placeholder:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 font-sans"
+                className="w-full rounded-xl border border-slate-300 bg-white pl-9 pr-3.5 py-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 font-sans"
               />
             </div>
           </div>
@@ -121,12 +121,12 @@ export default function LoginPage() {
           <div className="space-y-1.5">
             <label
               htmlFor="password-input"
-              className="text-xs font-semibold text-slate-300 flex items-center justify-between"
+              className="text-xs font-semibold text-slate-700 flex items-center justify-between"
             >
               <span>Password</span>
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+              <Lock className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
               <input
                 id="password-input"
                 type={showPassword ? "text" : "password"}
@@ -134,13 +134,13 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-slate-800 bg-slate-900/70 pl-9 pr-10 py-2 text-xs sm:text-sm text-slate-100 placeholder:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 font-sans"
+                className="w-full rounded-xl border border-slate-300 bg-white pl-9 pr-10 py-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 font-sans"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
-                className="absolute right-3 top-2.5 text-slate-500 hover:text-slate-300"
+                className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
               >
                 {showPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -157,7 +157,7 @@ export default function LoginPage() {
             variant="primary"
             size="md"
             isLoading={isLoading}
-            className="w-full mt-2 gap-2 shadow-indigo-500/25"
+            className="w-full mt-2 gap-2 bg-teal-600 hover:bg-teal-700 text-white border-transparent"
           >
             <span>Sign In</span>
             <ArrowRight className="h-4 w-4" />
@@ -165,11 +165,11 @@ export default function LoginPage() {
         </form>
       </CardContent>
 
-      <CardFooter className="border-t border-slate-800/80 pt-4 flex items-center justify-between text-xs text-slate-400">
+      <CardFooter className="border-t border-slate-200 pt-4 flex items-center justify-between text-xs text-slate-600">
         <span>Need a student account?</span>
         <Link
           href="/register"
-          className="font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
+          className="font-semibold text-teal-600 hover:text-teal-700 transition-colors"
         >
           Register Here
         </Link>

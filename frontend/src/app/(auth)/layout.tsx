@@ -8,18 +8,18 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col bg-[#0B1120] text-slate-100 antialiased">
+    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900 antialiased">
       {/* Top Brand Bar */}
-      <header className="flex h-16 w-full items-center justify-between border-b border-slate-800/80 px-6 backdrop-blur-md">
+      <header className="flex h-16 w-full items-center justify-between border-b border-slate-200 bg-white px-6">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 to-cyan-400 text-white shadow-md shadow-indigo-500/20">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-teal-600 text-white shadow-sm">
             <GraduationCap className="h-4.5 w-4.5" />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-bold tracking-tight text-slate-100">
+            <span className="text-sm font-bold tracking-tight text-slate-900">
               Adaptive Tutor
             </span>
-            <span className="text-[9px] font-mono text-cyan-400">
+            <span className="text-[10px] font-mono text-teal-600">
               Learning Platform
             </span>
           </div>
@@ -35,7 +35,7 @@ export default function AuthLayout({
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800/60 py-4 text-center text-xs text-slate-500 font-mono">
+      <footer className="border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500 font-mono">
         Adaptive Tutor &middot; Student Learning Platform
       </footer>
     </div>
