@@ -832,7 +832,15 @@ selector = AdaptiveActivitySelector()
 
 mcq_analyzer = MCQAnalyzer()
 code_analyzer = CodeAnalyzer()
-short_answer_analyzer = ShortAnswerAnalyzer(model_name="sentence-transformers/all-MiniLM-L6-v2")
+def _resolve_sbert_model_path() -> str:
+    env_path = os.getenv("SBERT_MODEL_PATH", "").strip()
+    if env_path and (os.path.isdir(env_path) or os.path.exists(env_path)):
+        return env_path
+    if os.path.isdir("models/sbert_programming_minilm"):
+        return "models/sbert_programming_minilm"
+    return env_path or "sentence-transformers/all-MiniLM-L6-v2"
+
+short_answer_analyzer = ShortAnswerAnalyzer(model_name=_resolve_sbert_model_path())
 
 # Tracking attempted MCQs per student, concept, and difficulty level
 student_attempted_mcqs: Dict[str, Dict[str, Dict[str, List[str]]]] = {}

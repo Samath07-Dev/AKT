@@ -19,16 +19,25 @@ class ShortAnswerAnalyzer:
     Computes semantic similarity against standard answer rubrics and clamps scores to [0.0, 1.0].
     """
     def __init__(self, model_name: Optional[str] = None):
-        self.model_name = model_name or os.getenv("SBERT_MODEL_PATH", "sentence-transformers/all-MiniLM-L6-v2")
+        if model_name:
+            self.model_name = model_name
+        else:
+            env_path = os.getenv("SBERT_MODEL_PATH", "").strip()
+            if env_path and (os.path.isdir(env_path) or os.path.exists(env_path)):
+                self.model_name = env_path
+            elif os.path.isdir("models/sbert_programming_minilm"):
+                self.model_name = "models/sbert_programming_minilm"
+            else:
+                self.model_name = env_path or "sentence-transformers/all-MiniLM-L6-v2"
         self.model = None
         self._initialize_model()
 
     def _initialize_model(self):
-        """Initializes the SentenceTransformer model with graceful fallback handling."""
+        """Initializes the SentenceTransformer model strictly on CPU to avoid ZeroGPU CUDA traps."""
         try:
             from sentence_transformers import SentenceTransformer
-            self.model = SentenceTransformer(self.model_name)
-            print(f"ShortAnswerAnalyzer: Successfully loaded transformer model '{self.model_name}'")
+            self.model = SentenceTransformer(self.model_name, device="cpu")
+            print(f"ShortAnswerAnalyzer: Successfully loaded transformer model '{self.model_name}' on CPU")
         except Exception as e:
             print(f"ShortAnswerAnalyzer: Warning - Could not load transformer '{self.model_name}': {e}")
             print("  -> Falling back to lightweight lexical token similarity.")
@@ -43,10 +52,17 @@ class ShortAnswerAnalyzer:
         norm1 = np.linalg.norm(emb1)
         norm2 = np.linalg.norm(emb2)
 
-        if norm1 == 0.0 or norm2 == 0.0:
+        if norm1 == 0.0 or norm2 == 0.0 or np.isnan(norm1) or np.isnan(norm2):
             return 0.0
 
-        sim = float(np.dot(emb1, emb2) / (norm1 * norm2))
+        denom = float(norm1 * norm2)
+        if denom <= 0.0:
+            return 0.0
+
+        dot = float(np.dot(emb1, emb2))
+        sim = dot / denom
+        if np.isnan(sim):
+            return 0.0
         # Clamp cosine similarity strictly to [0.0, 1.0] interval
         bounded_sim = float(np.clip(sim, 0.0, 1.0))
         return bounded_sim
@@ -143,14 +159,26 @@ class ShortAnswerAnalyzer:
 
         if self.model is not None:
             try:
-                # Encode text responses into 384-dimensional dense semantic vectors
-                embeddings = self.model.encode([student_response, reference_answer], convert_to_numpy=True)
+                # Encode text responses into dense semantic vectors strictly on CPU
+                embeddings = self.model.encode(
+                    [student_response, reference_answer],
+                    device="cpu",
+                    convert_to_numpy=True
+                )
                 emb_student = embeddings[0]
                 emb_ref = embeddings[1]
 
                 raw_sim = self.compute_cosine_similarity(emb_student, emb_ref)
-                model_used = self.model_name
-            except Exception as e:
+                if raw_sim <= 0.0:
+                    lex_sim = self._fallback_lexical_similarity(student_response, reference_answer)
+                    if lex_sim > 0.0:
+                        raw_sim = lex_sim
+                        model_used = f"{self.model_name} + lexical_fallback"
+                    else:
+                        model_used = self.model_name
+                else:
+                    model_used = self.model_name
+            except (Exception, BaseException) as e:
                 raw_sim = self._fallback_lexical_similarity(student_response, reference_answer)
                 model_used = f"lexical_fallback ({e})"
         else:
