@@ -35,8 +35,12 @@ from pydantic import BaseModel, Field
 from typing import Dict, List, Optional, Any, Tuple
 import numpy as np
 from pymongo import MongoClient
-from pymongo.errors import DuplicateKeyError
+from pymongo.errors import DuplicateKeyError, ConnectionFailure, ServerSelectionTimeoutError
 from motor.motor_asyncio import AsyncIOMotorClient
+try:
+    import certifi
+except ImportError:
+    certifi = None
 
 from src.analyzers import MCQAnalyzer, CodeAnalyzer, ShortAnswerAnalyzer
 from src.analyzers.sandbox_runner import (
@@ -238,8 +242,23 @@ def get_motor_client() -> AsyncIOMotorClient:
 
     if _motor_client is None or _motor_loop is None or (_motor_loop is not None and (_motor_loop.is_closed() or _motor_loop != current_loop)):
         _motor_loop = current_loop
-        timeout_ms = int(os.getenv("MONGO_TIMEOUT_MS", "1500"))
-        _motor_client = AsyncIOMotorClient(MONGO_URI, serverSelectionTimeoutMS=timeout_ms)
+        timeout_ms = int(os.getenv("MONGO_TIMEOUT_MS", "10000"))
+        
+        client_kwargs: Dict[str, Any] = {
+            "serverSelectionTimeoutMS": timeout_ms,
+            "connectTimeoutMS": timeout_ms,
+        }
+        
+        # Configure TLS/SSL and root certificates for MongoDB Atlas / SRV URIs
+        is_atlas_or_tls = (
+            MONGO_URI.startswith("mongodb+srv://")
+            or "ssl=true" in MONGO_URI.lower()
+            or "tls=true" in MONGO_URI.lower()
+        )
+        if is_atlas_or_tls and certifi is not None:
+            client_kwargs["tlsCAFile"] = certifi.where()
+            
+        _motor_client = AsyncIOMotorClient(MONGO_URI, **client_kwargs)
     return _motor_client
 
 def get_motor_db():
@@ -249,7 +268,19 @@ def get_motor_db():
 def get_mongo_db():
     """Returns synchronous MongoDB database handle for fallback or synchronous utilities."""
     try:
-        client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=1500)
+        timeout_ms = int(os.getenv("MONGO_TIMEOUT_MS", "10000"))
+        client_kwargs: Dict[str, Any] = {
+            "serverSelectionTimeoutMS": timeout_ms,
+            "connectTimeoutMS": timeout_ms,
+        }
+        is_atlas_or_tls = (
+            MONGO_URI.startswith("mongodb+srv://")
+            or "ssl=true" in MONGO_URI.lower()
+            or "tls=true" in MONGO_URI.lower()
+        )
+        if is_atlas_or_tls and certifi is not None:
+            client_kwargs["tlsCAFile"] = certifi.where()
+        client = MongoClient(MONGO_URI, **client_kwargs)
         client.admin.command('ping')
         return client[MONGO_DB_NAME]
     except Exception:
@@ -1250,16 +1281,21 @@ async def register_student(
         raise HTTPException(status_code=400, detail="Password must be at least 4 characters long.")
 
     db = get_motor_db()
+    existing = None
+    db_available = True
     try:
         existing = await db["users"].find_one({"username": u_name})
-        if existing:
-            raise HTTPException(status_code=400, detail=f"Username '{req.username}' is already registered.")
-    except HTTPException:
-        raise
-    except Exception:
-        pass
+    except (ConnectionFailure, ServerSelectionTimeoutError) as conn_err:
+        logger.warning("MongoDB connection failure during user lookup: %s", conn_err)
+        db_available = False
+    except Exception as exc:
+        logger.warning("Database error during user registration lookup: %s", exc)
+        db_available = False
 
-    if u_name in _in_memory_users:
+    if existing:
+        raise HTTPException(status_code=400, detail=f"Username '{req.username}' is already registered.")
+
+    if not db_available and u_name in _in_memory_users:
         raise HTTPException(status_code=400, detail=f"Username '{req.username}' is already registered.")
 
     student_id = await generate_student_id_async(db)
@@ -1288,6 +1324,7 @@ async def register_student(
         "updated_at": now_iso
     }
 
+    persisted_to_db = False
     try:
         await db["users"].insert_one(dict(user_doc))
         await db["student_states"].update_one(
@@ -1295,8 +1332,11 @@ async def register_student(
             {"$set": state_doc},
             upsert=True
         )
-    except Exception:
-        pass
+        persisted_to_db = True
+    except DuplicateKeyError:
+        raise HTTPException(status_code=400, detail=f"Username '{req.username}' is already registered.")
+    except Exception as exc:
+        logger.warning("Failed to persist user to MongoDB: %s; saving in-memory", exc)
 
     _in_memory_users[u_name] = user_doc
     _in_memory_student_states[student_id] = state_doc
@@ -1327,15 +1367,25 @@ async def login_student(
 
     db = get_motor_db()
     user = None
+    db_error = False
     try:
         user = await db["users"].find_one({"username": u_name})
-    except Exception:
-        pass
+    except (ConnectionFailure, ServerSelectionTimeoutError) as conn_err:
+        logger.warning("MongoDB connection failure during login lookup: %s", conn_err)
+        db_error = True
+    except Exception as exc:
+        logger.warning("Database error during login user query: %s", exc)
+        db_error = True
 
     if not user:
         user = _in_memory_users.get(u_name)
 
     if not user:
+        if db_error and not _in_memory_users:
+            raise HTTPException(
+                status_code=503,
+                detail="Database service currently unavailable. Please verify MongoDB connection."
+            )
         raise HTTPException(status_code=401, detail="Invalid username or password.")
 
     stored_hash = user.get("password_hash")
