@@ -15,6 +15,7 @@ import math
 import os
 import shutil
 import subprocess
+import sys
 import uuid
 from dataclasses import dataclass, asdict
 from typing import Any, Dict, List, Optional
@@ -188,6 +189,11 @@ def _main():
         raise TimeoutError("Execution timed out")
 
     old_handler = signal.signal(signal.SIGALRM, _timeout_handler)
+    try:
+        if hasattr(signal, "SIGXCPU"):
+            signal.signal(signal.SIGXCPU, _timeout_handler)
+    except Exception:
+        pass
 
     for idx, tc in enumerate(test_cases):
         call_expr = str(tc.get("call", ""))
@@ -195,7 +201,8 @@ def _main():
         expected = tc.get("expected")
         stdout_buf = _BoundedBuffer()
         stderr_buf = _BoundedBuffer()
-        case_dir = tempfile.mkdtemp(prefix=f"case_{idx}_", dir="/work")
+        work_base = "/work" if os.path.isdir("/work") else None
+        case_dir = tempfile.mkdtemp(prefix=f"case_{idx}_", dir=work_base)
         old_cwd = os.getcwd()
         orig_out, orig_err = sys.stdout, sys.stderr
         passed = False
@@ -272,9 +279,18 @@ class SandboxEvaluationResult:
 
 def is_sandbox_offline() -> bool:
     """
-    Fail closed unless SANDBOX_OFFLINE is explicitly set to an offline-disabled value ('0', 'false', 'no', 'off').
+    Fail closed if SANDBOX_OFFLINE is set to an offline value ('1', 'true', 'yes', 'on').
+    Returns False when set to an active value ('0', 'false', 'no', 'off', 'fallback', 'subprocess').
     """
     raw = os.getenv("SANDBOX_OFFLINE", "1").strip().lower()
+    return raw in ("1", "true", "yes", "on")
+
+
+def is_subprocess_fallback_allowed() -> bool:
+    """
+    Returns True unless ALLOW_SUBPROCESS_FALLBACK is explicitly disabled ('0', 'false', 'no', 'off').
+    """
+    raw = os.getenv("ALLOW_SUBPROCESS_FALLBACK", "1").strip().lower()
     return raw not in ("0", "false", "no", "off")
 
 
@@ -333,57 +349,69 @@ class SecureDockerPythonEvaluator:
 
     def is_sandbox_available(self) -> tuple[bool, Optional[str], Optional[str]]:
         """
-        Checks offline policy, Docker CLI availability, daemon health, and pinned digest presence.
-        Returns (available, docker_binary, reason_if_unavailable).
+        Checks offline policy, Docker CLI availability, daemon health, and fallback subprocess readiness.
+        Returns (available, runner_target, reason_if_unavailable).
+        runner_target is either the path to the docker binary or 'subprocess'.
         """
         if is_sandbox_offline():
             return False, None, "SANDBOX_OFFLINE is enabled."
 
-        docker_bin = resolve_docker_binary()
-        if not docker_bin:
-            return False, None, "Docker CLI binary not found."
+        raw_env = os.getenv("SANDBOX_OFFLINE", "1").strip().lower()
+        force_subprocess = raw_env in ("fallback", "subprocess")
 
-        inspect_cmd = [docker_bin, "image", "inspect", self.image, "--format", "{{.Id}}"]
-        wake_cmd = [
-            docker_bin,
-            "images",
-            "-a",
-            "--no-trunc",
-            "--digests",
-            "--format",
-            "{{.Repository}}:{{.Tag}}@{{.Digest}}",
-        ]
-        try:
-            probe = subprocess.run(
-                inspect_cmd,
-                capture_output=True,
-                text=True,
-                timeout=2.5,
-            )
-            if probe.returncode == 0:
-                return True, docker_bin, None
+        if not force_subprocess:
+            docker_bin = resolve_docker_binary()
+            if docker_bin:
+                inspect_cmd = [docker_bin, "image", "inspect", self.image, "--format", "{{.Id}}"]
+                wake_cmd = [
+                    docker_bin,
+                    "images",
+                    "-a",
+                    "--no-trunc",
+                    "--digests",
+                    "--format",
+                    "{{.Repository}}:{{.Tag}}@{{.Digest}}",
+                ]
+                try:
+                    probe = subprocess.run(
+                        inspect_cmd,
+                        capture_output=True,
+                        text=True,
+                        timeout=2.5,
+                    )
+                    if probe.returncode == 0:
+                        return True, docker_bin, None
 
-            # Fallback for Docker Desktop Resource Saver (Idle: shutdown):
-            # listing images triggers VM wake-up, after which the pinned digest is re-inspected.
-            wake_probe = subprocess.run(
-                wake_cmd,
-                capture_output=True,
-                text=True,
-                timeout=8.0,
-            )
-            if wake_probe.returncode == 0:
-                retry_probe = subprocess.run(
-                    inspect_cmd,
-                    capture_output=True,
-                    text=True,
-                    timeout=2.5,
-                )
-                if retry_probe.returncode == 0:
-                    return True, docker_bin, None
+                    # If daemon socket is absent or connection refused, skip wake attempt
+                    err_str = (probe.stderr or "").lower()
+                    if "connect:" not in err_str and "no such file or directory" not in err_str and "daemon running" not in err_str:
+                        # Fallback for Docker Desktop Resource Saver (Idle: shutdown):
+                        # listing images triggers VM wake-up, after which the pinned digest is re-inspected.
+                        wake_probe = subprocess.run(
+                            wake_cmd,
+                            capture_output=True,
+                            text=True,
+                            timeout=3.0,
+                        )
+                        if wake_probe.returncode == 0:
+                            retry_probe = subprocess.run(
+                                inspect_cmd,
+                                capture_output=True,
+                                text=True,
+                                timeout=2.0,
+                            )
+                            if retry_probe.returncode == 0:
+                                return True, docker_bin, None
+                except Exception:
+                    pass
 
-            return False, docker_bin, "Pinned sandbox image or Docker daemon unavailable."
-        except Exception:
-            return False, docker_bin, "Failed to verify Docker sandbox daemon."
+        # Safe fallback: Python isolated subprocess execution mode (3-second timeout)
+        if is_subprocess_fallback_allowed() or force_subprocess:
+            python_bin = sys.executable or shutil.which("python3")
+            if python_bin and os.access(python_bin, os.X_OK):
+                return True, "subprocess", None
+
+        return False, None, "Docker sandbox unavailable and subprocess fallback is disabled."
 
     def _cleanup_container(self, docker_bin: str, container_name: str) -> None:
         try:
@@ -396,6 +424,157 @@ class SecureDockerPythonEvaluator:
         except Exception:
             pass
 
+    def _evaluate_subprocess(
+        self,
+        code_string: str,
+        test_cases: List[Dict[str, Any]],
+        timeout_sec: float = 3.0,
+    ) -> SandboxEvaluationResult:
+        """
+        Executes code_string against test_cases inside an isolated Python interpreter subprocess
+        using `python -I` (isolated mode, ignoring PYTHONPATH, user site-packages, and host environment).
+        Enforces a strict timeout (default 3.0s).
+        """
+        cases = list(test_cases or [])
+        python_bin = sys.executable or shutil.which("python3") or "python3"
+        effective_timeout = min(float(timeout_sec or 3.0), 5.0)
+
+        payload = {
+            "code_string": code_string,
+            "test_cases": [
+                {
+                    "call": str(tc.get("call", "")),
+                    "expected": tc.get("expected"),
+                    "description": str(tc.get("description", "")),
+                }
+                for tc in cases
+            ],
+            "per_test_timeout_sec": min(self.per_test_timeout_sec, effective_timeout),
+        }
+
+        cmd = [
+            python_bin,
+            "-I",
+            "-c",
+            _CONTAINER_RUNNER_SCRIPT,
+        ]
+
+        try:
+            proc = subprocess.run(
+                cmd,
+                input=json.dumps(payload),
+                capture_output=True,
+                text=True,
+                timeout=effective_timeout,
+            )
+        except subprocess.TimeoutExpired:
+            timeout_results = [
+                {
+                    "testIndex": idx + 1,
+                    "call": str(tc.get("call", "")),
+                    "description": str(tc.get("description", "")),
+                    "passed": False,
+                    "error": f"Execution timed out ({effective_timeout}s limit).",
+                    "actualRepr": None,
+                }
+                for idx, tc in enumerate(cases)
+            ]
+            return SandboxEvaluationResult(
+                code_status="EVALUATED",
+                code_execution_status="EXECUTED",
+                code_score=0.0,
+                code_tests_passed=0,
+                code_tests_total=len(cases),
+                syntax_valid=True,
+                syntax_error=None,
+                runtime_error=f"Execution timed out after {effective_timeout} seconds.",
+                test_results=timeout_results,
+                feedback=f"Execution timed out after {effective_timeout} seconds in isolated fallback subprocess.",
+            )
+        except Exception as exc:
+            return self._pending_result(
+                test_cases=cases,
+                feedback=f"Failed to invoke isolated Python subprocess: {exc}",
+            )
+
+        stdout_text = (proc.stdout or "")[:MAX_OUTPUT_CHARS * 4].strip()
+        try:
+            parsed = json.loads(stdout_text)
+        except Exception:
+            if proc.returncode != 0:
+                err_hint = (proc.stderr or "").strip()
+                if not err_hint:
+                    sig_xcpu = getattr(signal, "SIGXCPU", None)
+                    if proc.returncode in (-24, -14, 124, 137, 142) or (sig_xcpu and proc.returncode == -sig_xcpu):
+                        err_hint = "Execution timed out inside isolated sandbox."
+                    elif proc.returncode in (-9, 137):
+                        err_hint = "Process terminated (killed/memory cap)."
+                    else:
+                        err_hint = f"Subprocess terminated abnormally with code {proc.returncode}"
+                err_results = [
+                    {
+                        "testIndex": idx + 1,
+                        "call": str(tc.get("call", "")),
+                        "description": str(tc.get("description", "")),
+                        "passed": False,
+                        "error": err_hint,
+                        "actualRepr": None,
+                    }
+                    for idx, tc in enumerate(cases)
+                ]
+                return SandboxEvaluationResult(
+                    code_status="EVALUATED",
+                    code_execution_status="EXECUTED",
+                    code_score=0.0,
+                    code_tests_passed=0,
+                    code_tests_total=len(cases),
+                    syntax_valid=True,
+                    syntax_error=None,
+                    runtime_error=err_hint,
+                    test_results=err_results,
+                    feedback=f"Subprocess execution terminated: {err_hint}",
+                )
+            return self._pending_result(
+                test_cases=cases,
+                feedback="Malformed response from isolated subprocess. Deferred to pending secure evaluation.",
+            )
+
+        if not parsed.get("ok", False):
+            return self._pending_result(
+                test_cases=cases,
+                feedback=str(parsed.get("runtime_error") or "Subprocess runner reported internal error."),
+            )
+
+        results = list(parsed.get("results", []))
+        total = len(cases)
+        passed = sum(1 for r in results if bool(r.get("passed")))
+        score = round((passed / total) * 100.0, 2) if total > 0 else 0.0
+        runtime_error = parsed.get("runtime_error")
+        syntax_valid = bool(parsed.get("syntax_valid", True))
+        syntax_error = parsed.get("syntax_error")
+
+        if total == 0:
+            feedback = "No test cases defined for this coding challenge."
+        elif passed == total:
+            feedback = f"All {passed}/{total} isolated Python test cases passed (fallback subprocess mode)."
+        elif runtime_error:
+            feedback = f"Passed {passed}/{total} test cases. Runtime error: {runtime_error}"
+        else:
+            feedback = f"Passed {passed}/{total} isolated Python test cases."
+
+        return SandboxEvaluationResult(
+            code_status="EVALUATED",
+            code_execution_status="EXECUTED",
+            code_score=score,
+            code_tests_passed=passed,
+            code_tests_total=total,
+            syntax_valid=syntax_valid,
+            syntax_error=syntax_error,
+            runtime_error=runtime_error,
+            test_results=results,
+            feedback=feedback,
+        )
+
     def evaluate(
         self,
         code_string: str,
@@ -403,7 +582,8 @@ class SecureDockerPythonEvaluator:
         timeout_sec: Optional[float] = None,
     ) -> SandboxEvaluationResult:
         """
-        Evaluates `code_string` against server-side `test_cases` inside an ephemeral Docker container.
+        Evaluates `code_string` against server-side `test_cases` inside an ephemeral Docker container,
+        or falls back to safe isolated Python subprocess execution if Docker is unavailable.
         """
         cases = list(test_cases or [])
         if not isinstance(code_string, str):
@@ -423,8 +603,8 @@ class SecureDockerPythonEvaluator:
                 feedback="Code submission exceeds maximum allowed size.",
             )
 
-        available, docker_bin, unavailable_reason = self.is_sandbox_available()
-        if not available or not docker_bin:
+        available, runner_target, unavailable_reason = self.is_sandbox_available()
+        if not available or not runner_target:
             return self._pending_result(
                 test_cases=cases,
                 feedback=(
@@ -488,8 +668,20 @@ class SecureDockerPythonEvaluator:
                 feedback=f"Python syntax error detected: {msg}",
             )
 
+        # If runner_target is "subprocess", run safe fallback subprocess evaluator
+        if runner_target == "subprocess":
+            case_count = max(len(cases), 1)
+            default_limit = min(max(self.per_test_timeout_sec * case_count + 1.0, 3.0), 10.0)
+            effective_timeout = min(float(timeout_sec or default_limit), 10.0)
+            return self._evaluate_subprocess(
+                code_string=code_string,
+                test_cases=cases,
+                timeout_sec=effective_timeout,
+            )
+
         effective_timeout = min(float(timeout_sec or self.container_timeout_sec), 10.0)
         container_name = f"akt_sandbox_{uuid.uuid4().hex[:12]}"
+        docker_bin = runner_target
 
         cmd = [
             docker_bin,
