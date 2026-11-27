@@ -44,33 +44,56 @@ export default function RegisterPage() {
 
     setIsLoading(true);
 
-    try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: fullName.trim(),
-          username: username.trim(),
-          password,
-        }),
-      });
+    const performRegister = async (isRetry = false) => {
+      try {
+        const res = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fullName: fullName.trim(),
+            username: username.trim(),
+            password,
+          }),
+        });
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (!res.ok) {
-        setError(data.error || "Registration failed. Please try again.");
+        if (!res.ok) {
+          if (res.status === 503 && !isRetry) {
+            setError("Service waking up, retry in a moment...");
+            setTimeout(() => {
+              performRegister(true);
+            }, 1800);
+            return;
+          }
+
+          if (res.status === 503) {
+            setError(data.error || "Service waking up, retry in a moment");
+          } else {
+            setError(data.error || "Registration failed. Please try again.");
+          }
+          setIsLoading(false);
+          return;
+        }
+
+        setSuccessMessage(data.message || "Account registered successfully! Redirecting to sign in...");
+        setTimeout(() => {
+          router.push("/login");
+        }, 1200);
+      } catch {
+        if (!isRetry) {
+          setError("Service waking up, retry in a moment...");
+          setTimeout(() => {
+            performRegister(true);
+          }, 1800);
+          return;
+        }
+        setError("Service waking up, retry in a moment");
         setIsLoading(false);
-        return;
       }
+    };
 
-      setSuccessMessage(data.message || "Account registered successfully! Redirecting to sign in...");
-      setTimeout(() => {
-        router.push("/login");
-      }, 1200);
-    } catch {
-      setError("Unable to connect to registration service. Please try again.");
-      setIsLoading(false);
-    }
+    performRegister(false);
   };
 
   return (

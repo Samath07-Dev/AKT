@@ -52,30 +52,51 @@ export async function POST(request: NextRequest) {
 
     const backendUrl = getFastApiBackendUrl();
 
-    let backendRes: Response;
-    try {
-      backendRes = await fetch(`${backendUrl}/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Internal-Service-Secret": serviceSecret,
-        },
-        body: JSON.stringify({
-          username: username.trim().toLowerCase(),
-          password,
-          full_name: fullName ? String(fullName).trim() : undefined,
-          email: email ? String(email).trim() : undefined,
-        }),
-      });
-    } catch {
+    let backendRes: Response | null = null;
+    let networkError = false;
+
+    // Retry once on network failure to smooth over cold boots
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        backendRes = await fetch(`${backendUrl}/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Internal-Service-Secret": serviceSecret,
+          },
+          body: JSON.stringify({
+            username: username.trim().toLowerCase(),
+            password,
+            full_name: fullName ? String(fullName).trim() : undefined,
+            email: email ? String(email).trim() : undefined,
+          }),
+        });
+        networkError = false;
+        if (backendRes.status >= 502 && attempt === 0) {
+          await new Promise((r) => setTimeout(r, 1200));
+          continue;
+        }
+        break;
+      } catch {
+        networkError = true;
+        if (attempt === 0) {
+          await new Promise((r) => setTimeout(r, 1500));
+        }
+      }
+    }
+
+    if (networkError || !backendRes) {
       return NextResponse.json(
-        { error: "Registration service currently unavailable. Please ensure the backend is running." },
+        { error: "Service waking up, retry in a moment" },
         { status: 503 }
       );
     }
 
     if (!backendRes.ok) {
       let errorDetail = "Registration failed.";
+      if (backendRes.status === 503) {
+        errorDetail = "Service waking up, retry in a moment";
+      }
       try {
         const errorData = await backendRes.json();
         if (errorData && errorData.detail) {

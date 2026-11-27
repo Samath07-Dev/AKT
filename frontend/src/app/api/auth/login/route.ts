@@ -57,22 +57,41 @@ export async function POST(request: NextRequest) {
 
     const backendUrl = getFastApiBackendUrl();
 
-    let backendRes: Response;
-    try {
-      backendRes = await fetch(`${backendUrl}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Internal-Service-Secret": serviceSecret,
-        },
-        body: JSON.stringify({
-          username: username.trim().toLowerCase(),
-          password,
-        }),
-      });
-    } catch {
+    let backendRes: Response | null = null;
+    let networkError = false;
+
+    // Retry once on network/connection failure to smooth over HF Spaces wake-ups
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        backendRes = await fetch(`${backendUrl}/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Internal-Service-Secret": serviceSecret,
+          },
+          body: JSON.stringify({
+            username: username.trim().toLowerCase(),
+            password,
+          }),
+        });
+        networkError = false;
+        // If we received 502/503 from backend wake-up, pause briefly and retry once
+        if (backendRes.status >= 502 && attempt === 0) {
+          await new Promise((r) => setTimeout(r, 1200));
+          continue;
+        }
+        break;
+      } catch {
+        networkError = true;
+        if (attempt === 0) {
+          await new Promise((r) => setTimeout(r, 1500));
+        }
+      }
+    }
+
+    if (networkError || !backendRes) {
       return NextResponse.json(
-        { error: "Authentication service currently unavailable. Please ensure the backend is running." },
+        { error: "Service waking up, retry in a moment" },
         { status: 503 }
       );
     }
@@ -90,8 +109,24 @@ export async function POST(request: NextRequest) {
           { status: 500 }
         );
       }
+      if (backendRes.status === 503) {
+        let message = "Service waking up, retry in a moment";
+        try {
+          const errData = await backendRes.json();
+          if (errData && errData.detail) message = errData.detail;
+        } catch {}
+        return NextResponse.json(
+          { error: message },
+          { status: 503 }
+        );
+      }
+      let genericError = "Authentication failed. Please check your credentials.";
+      try {
+        const errData = await backendRes.json();
+        if (errData && errData.detail) genericError = errData.detail;
+      } catch {}
       return NextResponse.json(
-        { error: "Authentication failed. Please check your credentials." },
+        { error: genericError },
         { status: backendRes.status }
       );
     }

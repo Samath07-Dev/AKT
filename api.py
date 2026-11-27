@@ -188,7 +188,22 @@ async def coding_evaluation_worker():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Manages application startup and background worker lifecycle."""
+    """Manages application startup, database index initialization, and background worker lifecycle."""
+    # Ensure database indexes on startup
+    logger.info("Initializing AKT backend with database: '%s' (URI: %s)", MONGO_DB_NAME, "configured" if MONGO_URI else "default")
+    print(f"[STARTUP] Active MongoDB Database: '{MONGO_DB_NAME}'")
+    print(f"[STARTUP] Memory Fallback Allowed: {is_memory_fallback_allowed()}")
+
+    try:
+        db = get_motor_db()
+        await execute_with_retry(
+            lambda: db["users"].create_index("username", unique=True),
+            operation_name="create_index(users.username)"
+        )
+        logger.info("Verified unique index on 'users.username' in '%s'.", MONGO_DB_NAME)
+    except Exception as exc:
+        logger.warning("Could not initialize unique index on users.username in '%s': %s", MONGO_DB_NAME, exc)
+
     worker_task = asyncio.create_task(coding_evaluation_worker())
     yield
     # Graceful shutdown: cancel background worker
@@ -227,7 +242,35 @@ app.add_middleware(
 
 # MongoDB Configuration & Motor Async Client
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
-MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "akt_tutor")
+# Explicitly default to akt_db and NEVER allow falling back to test
+_raw_db_name = os.getenv("MONGO_DB_NAME", "akt_db").strip()
+MONGO_DB_NAME = _raw_db_name if _raw_db_name and _raw_db_name.lower() != "test" else "akt_db"
+
+def is_production_environment() -> bool:
+    """Detects whether running in cloud production (e.g. Hugging Face Spaces, Docker container, or production env)."""
+    if os.getenv("SPACE_ID") or os.getenv("SPACE_AUTHOR_NAME"):
+        return True
+    env_str = os.getenv("ENVIRONMENT", os.getenv("NODE_ENV", "")).lower()
+    return env_str in ("production", "prod")
+
+def is_memory_fallback_allowed() -> bool:
+    """
+    Returns True if in-memory fallback is allowed when MongoDB is unreachable.
+    Defaults to False in production (so MongoDB failures return 503 rather than silently vanishing on container restart),
+    and True in local development.
+    Can be explicitly overridden via ALLOW_MEMORY_FALLBACK=true/false.
+    """
+    val = os.getenv("ALLOW_MEMORY_FALLBACK")
+    if val is not None:
+        return val.strip().lower() in ("1", "true", "yes", "on")
+    return not is_production_environment()
+
+def get_mongo_timeout_ms() -> int:
+    """Returns MongoDB timeout in milliseconds. Defaults to 5000 in production and 1500 in local development."""
+    env_timeout = os.getenv("MONGO_TIMEOUT_MS")
+    if env_timeout and env_timeout.strip().isdigit():
+        return int(env_timeout.strip())
+    return 5000 if is_production_environment() else 1500
 
 _motor_client: Optional[AsyncIOMotorClient] = None
 _motor_loop = None
@@ -242,7 +285,7 @@ def get_motor_client() -> AsyncIOMotorClient:
 
     if _motor_client is None or _motor_loop is None or (_motor_loop is not None and (_motor_loop.is_closed() or _motor_loop != current_loop)):
         _motor_loop = current_loop
-        timeout_ms = int(os.getenv("MONGO_TIMEOUT_MS", "10000"))
+        timeout_ms = get_mongo_timeout_ms()
         
         client_kwargs: Dict[str, Any] = {
             "serverSelectionTimeoutMS": timeout_ms,
@@ -265,10 +308,30 @@ def get_motor_db():
     """Returns asynchronous Motor database handle."""
     return get_motor_client()[MONGO_DB_NAME]
 
+async def execute_with_retry(async_func, max_retries: int = 1, operation_name: str = "MongoDB operation"):
+    """
+    Executes an async MongoDB operation with one retry upon connection or timeout failure.
+    Helps smooth over transient network hiccups and cloud TLS renegotiations.
+    """
+    last_err = None
+    for attempt in range(max_retries + 1):
+        try:
+            return await async_func()
+        except (ConnectionFailure, ServerSelectionTimeoutError) as err:
+            last_err = err
+            if attempt < max_retries:
+                logger.warning("%s encountered %s on attempt %d; retrying once in 0.5s...", operation_name, err, attempt + 1)
+                await asyncio.sleep(0.5)
+            else:
+                logger.error("%s failed after %d attempts: %s", operation_name, max_retries + 1, err)
+                raise
+        except Exception:
+            raise
+
 def get_mongo_db():
     """Returns synchronous MongoDB database handle for fallback or synchronous utilities."""
     try:
-        timeout_ms = int(os.getenv("MONGO_TIMEOUT_MS", "10000"))
+        timeout_ms = get_mongo_timeout_ms()
         client_kwargs: Dict[str, Any] = {
             "serverSelectionTimeoutMS": timeout_ms,
             "connectTimeoutMS": timeout_ms,
@@ -1249,7 +1312,7 @@ async def read_root():
     mongo_status = "connected (motor)"
     try:
         db = get_motor_db()
-        await db.command("ping")
+        await execute_with_retry(lambda: db.command("ping"), operation_name="ping")
     except Exception:
         mongo_status = "offline / fallback"
     return {
@@ -1257,10 +1320,32 @@ async def read_root():
         "status": "online",
         "version": "2.0.0",
         "mongodb": mongo_status,
+        "db_name": MONGO_DB_NAME,
+        "fallback_allowed": is_memory_fallback_allowed(),
         "model": "Behavior-AKT + MC Dropout Uncertainty + Difficulty Scaffolding + SBERT Short Answer Analyzer",
         "total_kcs": len(REFERENCE_ANSWERS),
         "kcs": list(REFERENCE_ANSWERS.keys()),
         "difficulties": ["easy", "medium", "hard"]
+    }
+
+@app.get("/health")
+@app.get("/api/v1/health")
+async def health_check():
+    """Detailed health and database connectivity probe."""
+    db_connected = False
+    try:
+        db = get_motor_db()
+        await execute_with_retry(lambda: db.command("ping"), operation_name="health_ping")
+        db_connected = True
+    except Exception as exc:
+        logger.warning("Health probe detected database unreachable: %s", exc)
+        db_connected = False
+
+    return {
+        "status": "healthy" if db_connected else ("degraded" if is_memory_fallback_allowed() else "unhealthy"),
+        "db_connected": db_connected,
+        "db_name": MONGO_DB_NAME,
+        "fallback_active": not db_connected and is_memory_fallback_allowed()
     }
 
 # Student Registration & Login Endpoints (MongoDB backed with motor)
@@ -1284,13 +1369,22 @@ async def register_student(
     existing = None
     db_available = True
     try:
-        existing = await db["users"].find_one({"username": u_name})
+        existing = await execute_with_retry(
+            lambda: db["users"].find_one({"username": u_name}),
+            operation_name=f"find_one(users, username={u_name})"
+        )
     except (ConnectionFailure, ServerSelectionTimeoutError) as conn_err:
         logger.warning("MongoDB connection failure during user lookup: %s", conn_err)
         db_available = False
     except Exception as exc:
         logger.warning("Database error during user registration lookup: %s", exc)
         db_available = False
+
+    if not db_available and not is_memory_fallback_allowed():
+        raise HTTPException(
+            status_code=503,
+            detail="Registration service temporarily unavailable: database connection could not be established. Please retry in a moment."
+        )
 
     if existing:
         raise HTTPException(status_code=400, detail=f"Username '{req.username}' is already registered.")
@@ -1326,17 +1420,41 @@ async def register_student(
 
     persisted_to_db = False
     try:
-        await db["users"].insert_one(dict(user_doc))
-        await db["student_states"].update_one(
-            {"student_id": student_id},
-            {"$set": state_doc},
-            upsert=True
+        await execute_with_retry(
+            lambda: db["users"].insert_one(dict(user_doc)),
+            operation_name=f"insert_one(users, username={u_name})"
+        )
+        await execute_with_retry(
+            lambda: db["student_states"].update_one(
+                {"student_id": student_id},
+                {"$set": state_doc},
+                upsert=True
+            ),
+            operation_name=f"update_one(student_states, id={student_id})"
         )
         persisted_to_db = True
     except DuplicateKeyError:
         raise HTTPException(status_code=400, detail=f"Username '{req.username}' is already registered.")
+    except (ConnectionFailure, ServerSelectionTimeoutError) as exc:
+        logger.warning("Failed to persist user to MongoDB due to connection failure: %s", exc)
+        if not is_memory_fallback_allowed():
+            raise HTTPException(
+                status_code=503,
+                detail="Registration service temporarily unavailable: database write failed. Please retry in a moment."
+            )
     except Exception as exc:
-        logger.warning("Failed to persist user to MongoDB: %s; saving in-memory", exc)
+        logger.warning("Failed to persist user to MongoDB: %s", exc)
+        if not is_memory_fallback_allowed():
+            raise HTTPException(
+                status_code=503,
+                detail="Registration service temporarily unavailable. Please retry in a moment."
+            )
+
+    if not persisted_to_db and not is_memory_fallback_allowed():
+        raise HTTPException(
+            status_code=503,
+            detail="Registration service temporarily unavailable: unable to persist account to database."
+        )
 
     _in_memory_users[u_name] = user_doc
     _in_memory_student_states[student_id] = state_doc
@@ -1369,7 +1487,10 @@ async def login_student(
     user = None
     db_error = False
     try:
-        user = await db["users"].find_one({"username": u_name})
+        user = await execute_with_retry(
+            lambda: db["users"].find_one({"username": u_name}),
+            operation_name=f"find_one(users, username={u_name})"
+        )
     except (ConnectionFailure, ServerSelectionTimeoutError) as conn_err:
         logger.warning("MongoDB connection failure during login lookup: %s", conn_err)
         db_error = True
@@ -1377,14 +1498,14 @@ async def login_student(
         logger.warning("Database error during login user query: %s", exc)
         db_error = True
 
-    if not user:
+    if not user and is_memory_fallback_allowed():
         user = _in_memory_users.get(u_name)
 
     if not user:
-        if db_error and not _in_memory_users:
+        if db_error:
             raise HTTPException(
                 status_code=503,
-                detail="Database service currently unavailable. Please verify MongoDB connection."
+                detail="Database service currently unavailable. Please verify MongoDB connection or retry in a moment."
             )
         raise HTTPException(status_code=401, detail="Invalid username or password.")
 

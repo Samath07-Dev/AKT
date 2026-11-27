@@ -60,10 +60,12 @@ export function getInternalServiceSecret(): string {
 }
 
 /**
- * Retrieves the FastAPI backend loopback URL.
+ * Retrieves the FastAPI backend URL.
+ * Checks BACKEND_URL, FASTAPI_BACKEND_URL, and BACKEND_API_URL.
  */
 export function getFastApiBackendUrl(): string {
   return (
+    process.env.BACKEND_URL ||
     process.env.FASTAPI_BACKEND_URL ||
     process.env.BACKEND_API_URL ||
     "http://127.0.0.1:8000"

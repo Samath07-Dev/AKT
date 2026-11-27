@@ -40,30 +40,56 @@ export default function LoginPage() {
 
     setIsLoading(true);
 
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: username.trim(),
-          password,
-        }),
-      });
+    const performLogin = async (isRetry = false) => {
+      try {
+        const res = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: username.trim(),
+            password,
+          }),
+        });
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (!res.ok) {
-        setError(data.error || "Authentication failed. Please check your credentials.");
+        if (!res.ok) {
+          // If service is cold/waking up (503) and we haven't retried yet, auto-retry once after 1.5s
+          if (res.status === 503 && !isRetry) {
+            setError("Service waking up, retry in a moment...");
+            setTimeout(() => {
+              performLogin(true);
+            }, 1800);
+            return;
+          }
+
+          if (res.status === 401) {
+            setError("Invalid username or password.");
+          } else if (res.status === 503) {
+            setError(data.error || "Service waking up, retry in a moment");
+          } else {
+            setError(data.error || "Authentication failed. Please check your credentials.");
+          }
+          setIsLoading(false);
+          return;
+        }
+
+        router.push("/dashboard");
+        router.refresh();
+      } catch {
+        if (!isRetry) {
+          setError("Service waking up, retry in a moment...");
+          setTimeout(() => {
+            performLogin(true);
+          }, 1800);
+          return;
+        }
+        setError("Service waking up, retry in a moment");
         setIsLoading(false);
-        return;
       }
+    };
 
-      router.push("/dashboard");
-      router.refresh();
-    } catch {
-      setError("Unable to connect to authentication service. Please try again.");
-      setIsLoading(false);
-    }
+    performLogin(false);
   };
 
   return (
